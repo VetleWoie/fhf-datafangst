@@ -22,6 +22,7 @@ import {
   CurrentTripMenu,
   MapControls,
 } from "components";
+import { EfficiencyMenu } from "components/Efficiencies/EfficiencyMenu";
 import { FishingFacilitiesLayer } from "components/Layers/FishingFacilitiesLayer";
 import { FC, useEffect, useState } from "react";
 import {
@@ -50,6 +51,7 @@ import {
   selectMatrixToggle,
   MatrixToggle,
 } from "store";
+import { selectEfficiency } from "store/efficiency";
 import { MinErsYear, MinLandingYear } from "utils";
 
 export interface MapFilter {
@@ -197,6 +199,7 @@ export const HomeView: FC = () => {
   const showHaulTimeSlider = useAppSelector(selectShowHaulTimeSlider);
   const showLandingTimeSlider = useAppSelector(selectShowLandingTimeSlider);
   const matrixToggle = useAppSelector(selectMatrixToggle);
+  const selectedEfficiency = useAppSelector(selectEfficiency);
 
   // Fetch hauls for selected grid
   useEffect(() => {
@@ -249,6 +252,7 @@ export const HomeView: FC = () => {
             <Box sx={{ gridRow: 1, gridColumn: 1, overflowY: "auto" }}>
               {selectedTrip && <TripsMenu />}
               {selectedCurrentTrip && <CurrentTripMenu />}
+              {selectedEfficiency && <EfficiencyMenu/>}
             </Box>
           </Box>
         </HaulMenuArea>

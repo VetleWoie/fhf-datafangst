@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import theme from "app/theme";
 import { FishIcon } from "assets/icons";
-import { MyGears, MyHauls, Trips, VesselInfo } from "components";
+import { MyGears, MyHauls, Trips, VesselInfo, MyEfficiency } from "components";
 import { FC, useState } from "react";
 import {
   getCurrentTrip,
@@ -26,12 +26,17 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AllInclusiveSharpIcon from "@mui/icons-material/AllInclusiveSharp";
 import PhishingSharpIcon from "@mui/icons-material/PhishingSharp";
+
+// Dev line
+import SpeedIcon from '@mui/icons-material/Speed';
+
 import { useAuth } from "oidc-react";
 
 enum MenuTab {
   Trips = "trips",
   Hauls = "hauls",
   Gears = "gears",
+  Efficiency = "Efficiency",
 }
 
 const accordionSx = {
@@ -63,11 +68,15 @@ export const MyPage: FC = () => {
   const vesselInfo = profile?.vesselInfo;
   const vessels = useAppSelector(selectVesselsByCallsign);
   const vessel = vesselInfo?.ircs ? vessels[vesselInfo.ircs] : undefined;
+  // const vessel = vessels["JXMK"];  // Dev line, get hardcoded vessel in my vessels
   const haulsSearch = useAppSelector(selectHaulsMatrixSearch);
   const fishingFacilitiesSearch = useAppSelector(selectFishingFacilitySearch);
 
   const handleTabChange = (expandedTab: MenuTab) => {
     setExpanded(expandedTab);
+
+    // Dev line
+    console.log(expandedTab)
 
     if (expandedTab === MenuTab.Trips && vessel) {
       dispatch(getCurrentTrip({ vessel }));
@@ -94,7 +103,7 @@ export const MyPage: FC = () => {
     return (
       <Box sx={{ p: 3 }}>
         <Typography variant="h6">
-          Du må være innlogget for å se denne siden
+          Du må være innlogget for å se denne diden
         </Typography>
         <Button
           sx={{
@@ -129,7 +138,7 @@ export const MyPage: FC = () => {
     <Box>
       <VesselInfo vessel={vessel} />
       <Divider sx={{ bgcolor: "text.secondary", mt: 3, mb: 1, mx: 4 }} />
-      <Accordion
+      <Accordion // Min hal
         square
         disableGutters
         sx={accordionSx}
@@ -157,7 +166,7 @@ export const MyPage: FC = () => {
           <MyHauls selectedVessel={vessel} />
         </AccordionDetails>
       </Accordion>
-      <Accordion
+      <Accordion // Mine turer
         square
         disableGutters
         TransitionProps={{ unmountOnExit: true }}
@@ -184,7 +193,7 @@ export const MyPage: FC = () => {
           <Trips />
         </AccordionDetails>
       </Accordion>
-      <Accordion
+      <Accordion // Mine redskap
         square
         disableGutters
         sx={accordionSx}
@@ -208,6 +217,32 @@ export const MyPage: FC = () => {
         </AccordionSummary>
         <AccordionDetails sx={{ pb: 0 }}>
           <MyGears />
+        </AccordionDetails>
+      </Accordion>
+      <Accordion
+        square
+        disableGutters
+        sx={accordionSx}
+        expanded={expanded === MenuTab.Efficiency}
+        onChange={() => handleTabChange(MenuTab.Efficiency)}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              "& svg": { mr: 2 },
+            }}
+          >
+            <SpeedIcon
+              sx={{ color: "secondary.light", fontSize: 32 }}
+            />
+          </Box>
+          <Typography variant="h6"> Mine effektivitetsmål </Typography>
+        </AccordionSummary>
+        <AccordionDetails sx={{ pb: 0 }}>
+          <MyEfficiency></MyEfficiency>
         </AccordionDetails>
       </Accordion>
     </Box>
