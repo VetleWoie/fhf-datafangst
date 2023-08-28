@@ -7,6 +7,7 @@ import { AisState, initialAisState } from "./ais";
 import { initialTripState, TripState } from "./trip";
 import { initialVmsState, VmsState } from "./vms";
 import { TrackState, initialTrackState } from "./track";
+import { EfficiencyState, initalEfficiencyState } from "./efficiency";
 import { FiskInfoProfile } from "models";
 import { User } from "oidc-react";
 import {
@@ -60,7 +61,8 @@ export interface AppState
     FishingFacilityState,
     UserState,
     LandingState,
-    SpeciesState {}
+    SpeciesState,
+    EfficiencyState {}
 
 export const initialAppState: AppState = {
   ...initialBaseState,
@@ -76,4 +78,5 @@ export const initialAppState: AppState = {
   ...initialSpeciesState,
   ...initialUserState,
   ...initialLandingState,
+  ...initalEfficiencyState,
 };
