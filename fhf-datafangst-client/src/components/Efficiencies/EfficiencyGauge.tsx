@@ -3,54 +3,48 @@ import ReactEChart from "echarts-for-react";
 import { FC, useRef} from "react";
 import { EfficiencyTheme } from "./EfficiencyTheme";
 
-import * as echarts from 'echarts';
+import { selectEfficiencies } from "store/efficiency";
+import { useAppSelector } from "store";
 
-const gaugeData = [
-    {
-      value: 20,
-      name: 'Good',
-      title: {
-        offsetCenter: ['0%', '80%']
-      },
-      detail: {
-        offsetCenter: ['00%', '95%']
-      }
-    },
-    {
-      value: 40,
-      name: 'Better',
-      title: {
-        offsetCenter: ['0%', '80%']
-      },
-      detail: {
-        offsetCenter: ['0%', '95%']
-      }
-    },
-    {
-      value: 60,
-      name: 'Perfect',
-      title: {
-        offsetCenter: ['40%', '80%']
-      },
-      detail: {
-        offsetCenter: ['40%', '95%']
-      }
-    }
-  ];
-
-const color = [
-  "#f9a976",
-  "#e81f76",
-  "#a6b1e1",
-  "#fac858",
-  "#73c0de",
-  "#3ba272",
-  "#fc8452",
-  "#9a60b4",
-  "#ea7ccc"
-]
+interface GaugeData {
+    value: number;
+    name: string;
+    title?: {
+      offsetCenter: string[];
+      color: string;
+    };
+    detail?: {
+      offsetCenter: string[];
+    };
+}
 
 export const EfficiencyGauge: FC = () => {
+
+  const selectedEfficiencies = useAppSelector(selectEfficiencies);
+
+  if(!selectedEfficiencies){
+    return <></>
+  }
+
+  const displayScores : GaugeData[] = [];
+
+  const detailSize = 200 / (2 * selectedEfficiencies.length);
+  selectedEfficiencies?.forEach( (efficiency, index) => {
+    let detailPos = (100/selectedEfficiencies.length) + (detailSize * 2 * index) - 100;
+    displayScores.push(
+      {
+        value: Math.random()*100, // Need to get score from somewhere
+        name: efficiency,
+        title: {
+          offsetCenter: [detailPos.toString()+"%", '110%'],
+          color: "white",
+        },
+        detail: {
+          offsetCenter: [detailPos.toString()+"%", '90%']
+        },
+      }
+    );
+  });
 
   const eChartsOption = {
       series: [
@@ -68,21 +62,29 @@ export const EfficiencyGauge: FC = () => {
             overlap: true,
             roundCap: true
           },
-          axisLine: {
-            roundCap: true,
-            linestyle: {
+          splitLine: {
+            lineStyle: {
               color: "white",
-              width: "10",
             }
           },
-          data: gaugeData,
+          axisTick: {
+            lineStyle: {
+              color: "white",
+            }
+          },
+          axisLabel: {
+            color: "white"
+          },
+          data: displayScores,
           detail: {
-            width: 40,
+            width: detailSize.toString() + "%" ,
             height: 14,
             fontSize: 14,
             backgroundColor: 'inherit',
             borderRadius: 3,
-            formatter: '{value}%'
+            formatter: (value: number) => {
+              return value.toFixed(2)
+            }
           }
         }
       ],
@@ -98,7 +100,7 @@ export const EfficiencyGauge: FC = () => {
               backgroundColor: 'primary.main',
             }}>
               <Box>
-                <Typography variant="h5">Poengtavle</Typography>
+                <Typography variant="h5">Min effektivitet</Typography>
               </Box>
               <Box>
                 <ReactEChart

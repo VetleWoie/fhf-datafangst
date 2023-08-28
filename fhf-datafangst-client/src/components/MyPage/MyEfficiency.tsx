@@ -51,6 +51,8 @@ export const MyEfficiency: FC = () => {
         >
           <ToggleButton value={EfficiencyViewState.timePerDay}> Tidsforbruk per dag </ToggleButton>
           <ToggleButton value={EfficiencyViewState.distancePerDay}> Distanse per dag </ToggleButton>
+          <ToggleButton value={EfficiencyViewState.fishPerDay}> Fisk per dag </ToggleButton>
+
         </ToggleButtonGroup>
       </Box>
     </Box>

@@ -1,6 +1,7 @@
 export enum EfficiencyViewState {
   timePerDay = "timesPerDay",
   distancePerDay = "distancePerDay",
+  fishPerDay = "FishPerDay"
 }
 
 export interface EfficiencyState {
