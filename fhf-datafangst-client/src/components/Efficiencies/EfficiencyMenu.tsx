@@ -1,6 +1,6 @@
 import { FC } from "react"
 import { useAppSelector, useAppDispatch } from "store";
-import { selectEfficiency, setSelectedEfficiency } from "store/efficiency";
+import { selectEfficiencies, setSelectEfficiencies } from "store/efficiency";
 import {
     Box,
     Divider,
@@ -24,7 +24,7 @@ import { EfficiencyLeaderboard } from "./EfficiencyLeaderboard";
 
 
 export const EfficiencyMenu: FC = () => {
-  const efficiency = useAppSelector(selectEfficiency);
+  const efficiency = useAppSelector(selectEfficiencies);
   const dispatch = useAppDispatch();
   const profile = useAppSelector(selectBwUserProfile);
 
@@ -32,14 +32,10 @@ export const EfficiencyMenu: FC = () => {
   const vessels = useAppSelector(selectVesselsByCallsign);
   const vessel = vesselInfo?.ircs ? vessels[vesselInfo.ircs] : undefined;
 
-  console.log(profile)
-
   if(!efficiency){
-    console.log(efficiency)
     return <></>;
   }
 
-  console.log(efficiency)
   return (
   <Box
   sx={{
@@ -86,7 +82,7 @@ export const EfficiencyMenu: FC = () => {
       <Box sx={{ marginLeft: "auto" }}>
         <IconButton
           onClick={() => {
-            dispatch(setSelectedEfficiency(undefined));
+            dispatch(setSelectEfficiencies(undefined));
           }}
         >
           <CloseSharpIcon sx={{ color: "white" }} />

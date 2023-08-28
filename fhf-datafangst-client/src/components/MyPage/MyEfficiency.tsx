@@ -1,6 +1,6 @@
 import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { FC, useEffect } from "react";
-import { selectEfficiency } from "store/efficiency/selectors";
+import { selectEfficiencies } from "store/efficiency/selectors";
 import theme from "app/theme";
 
 import {
@@ -8,14 +8,17 @@ import {
   useAppSelector,
 } from "store";
 import { EfficiencyViewState } from "store/efficiency/state";
-import { setSelectedEfficiency } from "store/efficiency/actions";
+import { setSelectEfficiencies } from "store/efficiency/actions";
 
 export const MyEfficiency: FC = () => {
   const dispatch = useAppDispatch();
-  const efficiencyState = useAppSelector(selectEfficiency)
+  const efficiencyStates = useAppSelector(selectEfficiencies)
 
-  function handleChange(newValue: EfficiencyViewState){
-    dispatch(setSelectedEfficiency(newValue));
+  function handleChange(newValue: EfficiencyViewState[]){
+    //Do not allow no values chosen for efficiencies
+    if (newValue.length != 0){
+      dispatch(setSelectEfficiencies(newValue));
+    }
   }
 
   return (
@@ -41,9 +44,8 @@ export const MyEfficiency: FC = () => {
       >
       <ToggleButtonGroup
         size="small"
-        value={efficiencyState}
-        exclusive
-        onChange={(_: React.MouseEvent<HTMLElement>, newValue: EfficiencyViewState) =>
+        value={efficiencyStates}
+        onChange={(_: React.MouseEvent<HTMLElement>, newValue: EfficiencyViewState[]) =>
           handleChange(newValue)
         }
         >

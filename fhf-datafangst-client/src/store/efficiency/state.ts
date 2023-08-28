@@ -4,9 +4,9 @@ export enum EfficiencyViewState {
 }
 
 export interface EfficiencyState {
-  selectedEfficiency?: EfficiencyViewState;
+  selectedEfficiencies?: EfficiencyViewState[];
 }
 
 export const initalEfficiencyState: EfficiencyState = {
-  selectedEfficiency : EfficiencyViewState.timePerDay,
+  selectedEfficiencies : [EfficiencyViewState.timePerDay,EfficiencyViewState.distancePerDay]
 };

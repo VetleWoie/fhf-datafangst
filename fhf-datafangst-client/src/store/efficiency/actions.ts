@@ -1,6 +1,6 @@
 import { createAction } from "@reduxjs/toolkit";
 import { EfficiencyViewState } from "./state";
 
-export const setSelectedEfficiency = createAction<EfficiencyViewState | undefined>(
-    "trip/setSelectedEfficiency",
+export const setSelectEfficiencies = createAction<EfficiencyViewState[] | undefined>(
+    "trip/setSelectEfficiencies",
   );

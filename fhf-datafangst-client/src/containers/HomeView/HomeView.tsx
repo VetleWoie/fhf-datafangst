@@ -51,7 +51,7 @@ import {
   selectMatrixToggle,
   MatrixToggle,
 } from "store";
-import { selectEfficiency } from "store/efficiency";
+import { selectEfficiencies } from "store/efficiency";
 import { MinErsYear, MinLandingYear } from "utils";
 
 export interface MapFilter {
@@ -199,7 +199,7 @@ export const HomeView: FC = () => {
   const showHaulTimeSlider = useAppSelector(selectShowHaulTimeSlider);
   const showLandingTimeSlider = useAppSelector(selectShowLandingTimeSlider);
   const matrixToggle = useAppSelector(selectMatrixToggle);
-  const selectedEfficiency = useAppSelector(selectEfficiency);
+  const selectedEfficiency = useAppSelector(selectEfficiencies);
 
   // Fetch hauls for selected grid
   useEffect(() => {

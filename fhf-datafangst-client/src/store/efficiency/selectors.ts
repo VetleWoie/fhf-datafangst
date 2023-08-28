@@ -1,7 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { selectAppState } from "store/selectors";
 
-export const selectEfficiency = createSelector(
+export const selectEfficiencies = createSelector(
   selectAppState,
-  (state) => state.selectedEfficiency,
+  (state) => state.selectedEfficiencies,
 );
