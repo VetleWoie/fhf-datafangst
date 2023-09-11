@@ -3,8 +3,8 @@ import ReactEChart from "echarts-for-react";
 import { FC, useRef} from "react";
 import { EfficiencyTheme } from "./EfficiencyTheme";
 
-import { selectEfficiencies } from "store/efficiency";
-import { useAppSelector } from "store";
+import { selectEfficiencies, selectEfficiencyClass } from "store/efficiency";
+import { selectBwUserProfile, useAppSelector } from "store";
 
 interface GaugeData {
     value: number;
@@ -23,6 +23,18 @@ interface GaugeData {
 export const EfficiencyGauge: FC = () => {
 
   const selectedEfficiencies = useAppSelector(selectEfficiencies);
+  const efficiencyClass = useAppSelector(selectEfficiencyClass)
+  const profile= useAppSelector(selectBwUserProfile);
+  const vesselInfo = profile?.vesselInfo;
+
+  const callsign = vesselInfo?.ircs ?? "";
+
+  const our_index = efficiencyClass?.findIndex(([key, value]) => key === callsign);
+
+  let efficiency_score =( efficiencyClass?.[our_index!][1].fishCaughtPerHour  ?? 0 / efficiencyClass?.[0][1].fishCaughtPerHour! )* 100;
+  
+
+
 
   if(!selectedEfficiencies){
     return <></>
@@ -35,7 +47,7 @@ export const EfficiencyGauge: FC = () => {
     let detailPos = (100/selectedEfficiencies.length) + (detailSize * 2 * index) - 100;
     displayScores.push(
       {
-        value: Math.random()*100, // Need to get score from somewhere
+        value: efficiency_score, // Need to get score from somewhere
         name: efficiency,
         title: {
           offsetCenter: [detailPos.toString()+"%", '110%'],

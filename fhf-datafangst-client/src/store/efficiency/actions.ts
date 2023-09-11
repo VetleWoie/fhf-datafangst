@@ -1,7 +1,9 @@
 import { createAction } from "@reduxjs/toolkit";
-import { EfficiencyVesselViewState, EfficiencyViewState } from "./state";
+import {  EfficiencyViewState } from "./state";
 
 export const setSelectEfficiencies = createAction<EfficiencyViewState[] | undefined>(
-    "trip/setSelectEfficiencies",
+    "efficiency/setSelectEfficiencies",
   );
+
+
 

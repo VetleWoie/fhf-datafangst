@@ -1,6 +1,7 @@
 import { ActionReducerMapBuilder, current } from "@reduxjs/toolkit";
 import { AppState } from "store/state";
-import { setSelectEfficiencies , setSelectVesselFilters,setSelectVessels} from "./actions";
+import {  setSelectEfficiencies , } from "./actions";
+import { FilterVesselsOnClass } from "./EfficiencyUtils";
 
 export const efficiencyBuilder = (
     builder: ActionReducerMapBuilder<AppState>,
@@ -10,4 +11,6 @@ export const efficiencyBuilder = (
         state.selectedTrip = undefined;
         state.selectedHaul = undefined;
         state.selectedEfficiencies = action.payload;
+        state.efficiencyClass = FilterVesselsOnClass(state.bwProfile,state.vesselsByCallsign)
       })
+      

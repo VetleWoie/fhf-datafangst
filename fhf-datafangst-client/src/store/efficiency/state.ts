@@ -7,8 +7,12 @@ export enum EfficiencyViewState {
 }
 export interface EfficiencyState {
   selectedEfficiencies?: EfficiencyViewState[];
+  efficiencyClass? : [string,Vessel][];
+
 }
 
+
 export const initalEfficiencyState: EfficiencyState = {
-  selectedEfficiencies : [EfficiencyViewState.timePerHour,EfficiencyViewState.distancePerHour],
+  selectedEfficiencies : [EfficiencyViewState.fishPerHour,],
+  efficiencyClass : undefined
 };
