@@ -1,14 +1,14 @@
 import { Vessel } from "generated/openapi";
 
 export enum EfficiencyViewState {
-  timePerDay = "timesPerDay",
-  distancePerDay = "distancePerDay",
-  fishPerDay = "FishPerDay"
+  timePerHour = "timePerHour",
+  distancePerHour = "distancePerHour",
+  fishPerHour = "FishPerHour"
 }
 export interface EfficiencyState {
   selectedEfficiencies?: EfficiencyViewState[];
 }
 
 export const initalEfficiencyState: EfficiencyState = {
-  selectedEfficiencies : [EfficiencyViewState.timePerDay,EfficiencyViewState.distancePerDay],
+  selectedEfficiencies : [EfficiencyViewState.timePerHour,EfficiencyViewState.distancePerHour],
 };

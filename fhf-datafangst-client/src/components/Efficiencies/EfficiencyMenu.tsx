@@ -30,10 +30,8 @@ export const EfficiencyMenu: FC = () => {
 
   const vesselInfo = profile?.vesselInfo;
   const vessels = useAppSelector(selectVesselsByCallsign);
-  // const vessel = vesselInfo?.ircs ? vessels[vesselInfo.ircs] : undefined;
+  const vessel = vesselInfo?.ircs ? vessels[vesselInfo.ircs] : undefined;
   
-  const vessel = vessels["LCOE"]
-  console.log(vessel)
 
   if(!efficiency){
     return <></>;

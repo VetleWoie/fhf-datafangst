@@ -9,9 +9,12 @@ import { Box, Typography } from "@mui/material";
 import { Vessel } from "generated/openapi";
 
 import {
+  selectBwUserProfile,
   selectVessels,
-  selectVesselsByCallsign, useAppSelector
+  selectVesselsByCallsign, useAppSelector,
+  
 } from "store";
+import { EfficiencyViewState, selectEfficiencies } from "store/efficiency";
 
 const seriesLabel = {
   show: true
@@ -19,13 +22,20 @@ const seriesLabel = {
 
 export const EfficiencyLeaderboard: FC = () => {
 
+  const profile = useAppSelector(selectBwUserProfile);
+  const efficiencies = useAppSelector(selectEfficiencies);
+  console.log(efficiencies)
+
+  const vesselInfo = profile?.vesselInfo;
   const vessels = useAppSelector(selectVesselsByCallsign)
-  const callsign = "LCOE"
+  const vessel = vesselInfo?.ircs ? vessels[vesselInfo.ircs] : undefined;
 
-  const vessel = vessels[callsign]
-  const boat_length = vessel?.fiskeridir?.lengthGroupId
+  const boat_length = vessel?.fiskeridir?.lengthGroupId ?? 0;
+  const callsign = vesselInfo?.ircs ?? "";
 
-  console.log(boat_length)
+  if (!vessel) {
+    return <></>;
+  }
 
   const filterVesselsOnLength = (vessels: Record<string, Vessel>, length: number) => {
 
@@ -52,10 +62,10 @@ export const EfficiencyLeaderboard: FC = () => {
     return filteredVessels;
   }
 
-  const findClosestVessels = (vessels: [string, Vessel][], vessel_name: string, num_closest: number = 5) => {
-    // sorted object, find the peers
-
-    // find the index of the vessel
+  const findClosestVessels = (vessels: [string, Vessel][], vessel_name?: string, num_closest: number = 5) => {
+    if (!vessel_name) {
+      return []
+    }
     const index = vessels.findIndex(([key, value]) => key === vessel_name);
 
     return vessels.slice(index - num_closest, index + num_closest)
@@ -71,14 +81,23 @@ export const EfficiencyLeaderboard: FC = () => {
   let data = Object.entries(filteredVessels)
 
   data.sort(([, a], [, b]) => {
-    return b.fishCaughtPerHour - a.fishCaughtPerHour
+    return b.fishCaughtPerHour! - a.fishCaughtPerHour!
   })
 
+  let series = []
 
-  let medioVessels = findClosestVessels(data, callsign, 2)
+  let medioVessels = findClosestVessels(data, callsign, 5)
 
-
-
+  if (efficiencies?.includes(EfficiencyViewState.fishPerHour)) {
+    series.push(createSeries(  
+      'Fangst per time',
+        [...medioVessels.filter(([key, vessel]) => key != callsign).map(([key, vessel]) => vessel.fishCaughtPerHour?.toFixed(1)), vessel?.fishCaughtPerHour?.toFixed(1)],
+      )
+    )
+  }
+  if (efficiencies?.includes(EfficiencyViewState.distancePerHour)) {
+    
+  }
 
   const eChartsOption = {
     tooltip: {
@@ -99,7 +118,7 @@ export const EfficiencyLeaderboard: FC = () => {
     yAxis: {
       type: 'category',
       inverse: true,
-      data: [...medioVessels.filter(([key, vessel]) => key != callsign).map(([key, vessel]) => vessel.fiskeridir?.name ?? key), vessel?.fiskeridir?.name],
+      data: [...medioVessels.filter(([key, _vessel]) => key != callsign).map(([key, vessel]) => vessel.fiskeridir?.name ?? key), vessel?.fiskeridir?.name],
       axisLabel: {
         formatter: '{value}',
         margin: 2,
@@ -108,75 +127,24 @@ export const EfficiencyLeaderboard: FC = () => {
             lineHeight: 30,
             align: 'center'
           },
-          // [vessel.fiskeridir?.name]: {
-          //   height: 100,
-          //   align: 'center',
-          //   color: "red",
-          // },
 
-          // ...medioVessels.reduce((acc, [key, vessel]) => {
-          //   return {
-          //     ...acc,
-          //     [vessel.fiskeridir.name as string]: {
-          //       align: 'center',
-          //       height: 40,
-          //       color: vessel.fiskeridir.callSign == callsign ? "red" : "green",
-          //     }
-          //   }
-          // },{})
+
+          ...medioVessels.reduce((acc, [key, vessel]) => {
+            return {
+              ...acc,
+              [vessel.fiskeridir.name as string]: {
+                align: 'center',
+                height: 40,
+                color: vessel.fiskeridir.callSign == callsign ? "red" : "green",
+              }
+            }
+          }, {})
         },
 
       }
     },
-    series: [
-      {
-        name: 'Fangst per time',
-        type: 'bar',
-        data: [...medioVessels.filter(([key, vessel]) => key != callsign).map(([key, vessel]) => vessel.fishCaughtPerHour?.toFixed(1)), vessel?.fishCaughtPerHour?.toFixed(1)],
-        label: seriesLabel,
-        markPoint: {
-          symbolSize: 1,
-          symbolOffset: [0, '50%'],
-          label: {
-            formatter: '{a|{a}\n}{b|{b} }{c|{c}}',
-            // backgroundColor: 'rgb(242,242,242)',
-            borderColor: '#aaa',
-            borderWidth: 1,
-            borderRadius: 4,
-            padding: [4, 10],
-            lineHeight: 40,
-            position: 'right',
-            distance: 20,
-            rich: {
-              value: {
-                align: 'center',
-                fontSize: 18,
-                textShadowBlur: 2,
-                textShadowOffsetX: 0,
-                textShadowOffsetY: 1,
-                textBorderWidth: 2, 
-                color:"red"
-              },
-              [vessel?.fiskeridir?.name as string]: {
-                color: 'red'
-              },
-              c: {
-                // color: '#ff8811',
-                // textBorderColor: '#000',
-                textBorderWidth: 1,
-                fontSize: 22
-              }
-            },
-            data: [
-              { type: 'max', name: 'max days: ' },
-              { type: 'min', name: 'min days: ' }
-            ]
-          }
-        },
-      }
-    ]
+    series: series
   };
-  console.log(eChartsOption)
 
   return (
     <Box
@@ -201,3 +169,55 @@ export const EfficiencyLeaderboard: FC = () => {
 
 
 
+
+function createSeries(name: string, data?: string []) {
+  return {
+    name: name,
+    type: 'bar',
+    data: data,
+    label: seriesLabel,
+    markPoint: {
+      symbolSize: 1,
+      symbolOffset: [0, '50%'],
+      label: {
+        formatter: '{a|{a}\n}{b|{b} }{c|{c}}',
+        // backgroundColor: 'rgb(242,242,242)',
+        borderColor: '#aaa',
+        borderWidth: 1,
+        borderRadius: 4,
+        padding: [4, 10],
+        lineHeight: 40,
+        position: 'right',
+        distance: 20,
+        rich: {
+          value: {
+            align: 'center',
+            fontSize: 18,
+            textShadowBlur: 2,
+            textShadowOffsetX: 0,
+            textShadowOffsetY: 1,
+            textBorderWidth: 2,
+            color: "red"
+          },
+          // [name as string]: {
+          //   color: 'red'
+          // },
+          c: {
+            // color: '#ff8811',
+            // textBorderColor: '#000',
+            textBorderWidth: 1,
+            fontSize: 22
+          }
+        },
+        data: [
+          { type: 'max', name: 'max days: ' },
+          { type: 'min', name: 'min days: ' }
+        ]
+      }
+    },
+
+
+  }
+
+
+}
