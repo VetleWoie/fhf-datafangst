@@ -18,6 +18,8 @@ interface GaugeData {
     };
 }
 
+
+
 export const EfficiencyGauge: FC = () => {
 
   const selectedEfficiencies = useAppSelector(selectEfficiencies);

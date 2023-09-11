@@ -16,6 +16,7 @@ import {
 } from "./fishingFacility";
 import { initialUserState, UserState } from "./user";
 import { LandingState, initialLandingState } from "./landing";
+import { init } from "echarts";
 
 export enum MenuViewState {
   Overview = "overview",
@@ -62,7 +63,8 @@ export interface AppState
     UserState,
     LandingState,
     SpeciesState,
-    EfficiencyState {}
+    EfficiencyState
+     {}
 
 export const initialAppState: AppState = {
   ...initialBaseState,

@@ -31,6 +31,7 @@ export const EfficiencyMenu: FC = () => {
   const vesselInfo = profile?.vesselInfo;
   const vessels = useAppSelector(selectVesselsByCallsign);
   const vessel = vesselInfo?.ircs ? vessels[vesselInfo.ircs] : undefined;
+  
 
   if(!efficiency){
     return <></>;
@@ -62,7 +63,7 @@ export const EfficiencyMenu: FC = () => {
         display: "flex",
         py: 3,
         px: 2.5,
-        backgroundColor: "priamry.main",
+        backgroundColor: "primary.main",
         color: "white",
       }}
     >
