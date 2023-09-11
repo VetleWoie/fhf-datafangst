@@ -58,5 +58,6 @@ The container mounts this folder to its filesystem so that you can edit files lo
         - ```enum EfficencyViewState```
           - ```timePerDay```
           - ```distancePerDay```
+          - ```fishPerDay```
         - ```undefined```
     - Chosen by the togglebuttons in [MyEfficiency.tsx](./fhf-datafangst-client/src/components/MyPage/MyEfficiency.tsx)
