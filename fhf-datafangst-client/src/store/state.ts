@@ -37,6 +37,7 @@ export interface BaseState {
   authUser?: User;
   matrixToggle: MatrixToggle;
   tripFiltersOpen: boolean;
+  tripDetailsOpen: boolean;
 }
 
 const initialBaseState: BaseState = {
@@ -47,6 +48,7 @@ const initialBaseState: BaseState = {
   authUser: undefined,
   matrixToggle: MatrixToggle.Haul,
   tripFiltersOpen: false,
+  tripDetailsOpen: false,
 };
 
 export interface AppState

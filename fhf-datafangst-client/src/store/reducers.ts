@@ -7,6 +7,7 @@ import {
   resetTrackState,
   setError,
   setMatrixToggle,
+  setTripDetailsOpen,
   setTripFiltersOpen,
   setViewState,
 } from "./actions";
@@ -94,7 +95,13 @@ const baseBuilder = (builder: ActionReducerMapBuilder<AppState>) =>
       state.bwProfile = action.payload;
 
       // Hijack Skomværfisk as a vessel for testing purposes.
-      if (state.bwProfile.contactPersonDetail.email === "post@orcalabs.no") {
+      if (
+        state.bwProfile.contactPersonDetail.email === "post@orcalabs.no" ||
+        state.bwProfile.contactPersonDetail.email ===
+          "stale.walderhaug@sintef.no" ||
+        state.bwProfile.contactPersonDetail.email ===
+          "vetle.hofsoy-woie@sintef.no"
+      ) {
         state.bwProfile.vesselInfo = {
           ircs: "JXMK",
           mmsi: 257842500,
@@ -126,6 +133,9 @@ const baseBuilder = (builder: ActionReducerMapBuilder<AppState>) =>
     .addCase(resetTrackState, (state, _) => ({ ...state, ...emptyTrackState }))
     .addCase(setTripFiltersOpen, (state, action) => {
       state.tripFiltersOpen = action.payload;
+    })
+    .addCase(setTripDetailsOpen, (state, action) => {
+      state.tripDetailsOpen = action.payload;
     })
     .addCase(resetState, (state, _) => ({ ...state, ...emptyState }));
 

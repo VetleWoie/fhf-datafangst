@@ -45,3 +45,4 @@ export { WeightFilter } from "./MainMenu/SearchFilters/WeightFilter";
 export { SortingFilter } from "./MainMenu/SearchFilters/SortingFilter";
 export { SearchFilters } from "./MainMenu/SearchFilters/SearchFilters";
 export { MyEfficiency } from "./MyPage/MyEfficiency"
+export { TripDetails } from "./TripDetails/TripDetails";

@@ -21,6 +21,7 @@ import {
   SeamapLayer,
   CurrentTripMenu,
   MapControls,
+  TripDetails,
 } from "components";
 import { EfficiencyMenu } from "components/Efficiencies/EfficiencyMenu";
 import { FishingFacilitiesLayer } from "components/Layers/FishingFacilitiesLayer";
@@ -50,6 +51,7 @@ import {
   setLandingsMatrix2Search,
   selectMatrixToggle,
   MatrixToggle,
+  selectTripDetailsOpen,
 } from "store";
 import { selectEfficiency } from "store/efficiency";
 import { MinErsYear, MinLandingYear } from "utils";
@@ -184,6 +186,21 @@ const TimeSliderArea = (props: { open: boolean; children: any }) => (
   </Box>
 );
 
+const CenterArea = (props: { open: boolean; children: any }) => (
+  <Box
+    sx={{
+      gridColumnStart: 2,
+      gridColumnEnd: props.open ? 2 : 4,
+      gridRowStart: 2,
+      gridRowEnd: 5,
+      display: "flex",
+      justifyContent: "flex-end",
+    }}
+  >
+    {props.children}
+  </Box>
+);
+
 export const HomeView: FC = () => {
   const [mapFilter, setMapFilter] = useState<MapFilter>(initialMapFilter);
   const dispatch = useAppDispatch();
@@ -200,6 +217,7 @@ export const HomeView: FC = () => {
   const showLandingTimeSlider = useAppSelector(selectShowLandingTimeSlider);
   const matrixToggle = useAppSelector(selectMatrixToggle);
   const selectedEfficiency = useAppSelector(selectEfficiency);
+  const tripDetailsOpen = useAppSelector(selectTripDetailsOpen);
 
   // Fetch hauls for selected grid
   useEffect(() => {
@@ -210,12 +228,18 @@ export const HomeView: FC = () => {
               years: haulsSearch?.years,
               months: haulsSearch?.months,
               vessels: haulsSearch?.vessels,
+              gearGroupIds: haulsSearch?.gearGroupIds,
+              speciesGroupIds: haulsSearch?.speciesGroupIds,
+              vesselLengthRanges: haulsSearch?.vesselLengthRanges,
               catchLocations: selectedGrids,
             })
           : setLandingsMatrix2Search({
               years: landingsSearch?.years,
               months: landingsSearch?.months,
               vessels: landingsSearch?.vessels,
+              gearGroupIds: landingsSearch?.gearGroupIds,
+              speciesGroupIds: landingsSearch?.speciesGroupIds,
+              vesselLengthRanges: landingsSearch?.vesselLengthRanges,
               catchLocations: selectedGrids,
             }),
       );
@@ -298,6 +322,11 @@ export const HomeView: FC = () => {
           <MapControls />
           <MapAttributions />
         </MapAttributionsArea>
+        {tripDetailsOpen && (
+          <CenterArea open={secondaryMenuOpen}>
+            <TripDetails />
+          </CenterArea>
+        )}
       </GridContainer>
       <Map>
         <MapBoxLayer />
