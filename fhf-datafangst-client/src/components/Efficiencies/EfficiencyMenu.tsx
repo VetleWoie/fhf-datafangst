@@ -1,6 +1,6 @@
 import { FC } from "react"
 import { useAppSelector, useAppDispatch } from "store";
-import { selectEfficiencies, setSelectEfficiencies } from "store/efficiency";
+import { selectEfficiency, setSelectedEfficiency } from "store/efficiency";
 import {
     Box,
     Divider,
@@ -24,14 +24,14 @@ import { EfficiencyLeaderboard } from "./EfficiencyLeaderboard";
 
 
 export const EfficiencyMenu: FC = () => {
-  const efficiency = useAppSelector(selectEfficiencies);
+  const efficiency = useAppSelector(selectEfficiency);
   const dispatch = useAppDispatch();
   const profile = useAppSelector(selectBwUserProfile);
 
   const vesselInfo = profile?.vesselInfo;
   const vessels = useAppSelector(selectVesselsByCallsign);
   const vessel = vesselInfo?.ircs ? vessels[vesselInfo.ircs] : undefined;
-  
+
 
   if(!efficiency){
     return <></>;
@@ -73,7 +73,7 @@ export const EfficiencyMenu: FC = () => {
         sx={{ alignSelf: "center" }}
       />
       <Box sx={{ marginLeft: 2}}>
-        <Typography variant="h5">Effektivitet</Typography>
+        <Typography variant="h5">{efficiency}</Typography>
         <Typography color="secondary.light" variant="h6">
           {toTitleCase(
              vessel?.fiskeridir.name ?? "Ukjent",
@@ -83,7 +83,7 @@ export const EfficiencyMenu: FC = () => {
       <Box sx={{ marginLeft: "auto" }}>
         <IconButton
           onClick={() => {
-            dispatch(setSelectEfficiencies(undefined));
+            dispatch(setSelectedEfficiency(undefined));
           }}
         >
           <CloseSharpIcon sx={{ color: "white" }} />

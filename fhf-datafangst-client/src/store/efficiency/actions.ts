@@ -1,9 +1,11 @@
 import { createAction } from "@reduxjs/toolkit";
-import {  EfficiencyViewState } from "./state";
+import {  EfficiencyDurationState, EfficiencyViewState } from "./state";
 
-export const setSelectEfficiencies = createAction<EfficiencyViewState[] | undefined>(
-    "efficiency/setSelectEfficiencies",
+export const setSelectedEfficiency = createAction<EfficiencyViewState | undefined>(
+    "efficiency/setSelectedEfficiency",
   );
 
-
+export const setSelectedEfficiencyDuration = createAction<EfficiencyDurationState[] | undefined>(
+  "efficiency/setSelectedEfficiencyDuration",
+)
 

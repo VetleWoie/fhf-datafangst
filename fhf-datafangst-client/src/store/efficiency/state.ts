@@ -5,14 +5,24 @@ export enum EfficiencyViewState {
   distancePerHour = "distancePerHour",
   fishPerHour = "FishPerHour"
 }
+
+export enum EfficiencyDurationState {
+  day = "day",
+  week = "week",
+  month = "month",
+  year = "year",
+}
+
 export interface EfficiencyState {
-  selectedEfficiencies?: EfficiencyViewState[];
+  selectedEfficiency?: EfficiencyViewState;
+  selectedEfficienciyDuration?: EfficiencyDurationState[];
   efficiencyClass? : [string,Vessel][];
 
 }
 
 
 export const initalEfficiencyState: EfficiencyState = {
-  selectedEfficiencies : [EfficiencyViewState.fishPerHour,],
-  efficiencyClass : undefined
+  selectedEfficiency : undefined,
+  selectedEfficienciyDuration : undefined,
+  efficiencyClass : undefined,
 };

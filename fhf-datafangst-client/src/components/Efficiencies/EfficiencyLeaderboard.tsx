@@ -4,7 +4,7 @@ import { FC } from "react";
 import { EfficiencyTheme } from "./EfficiencyTheme";
 import { Box, Typography } from "@mui/material";
 import { selectBwUserProfile, selectVesselsByCallsign, useAppDispatch, useAppSelector } from "store";
-import { EfficiencyViewState, selectEfficiencies, selectEfficiencyClass,  } from "store/efficiency";
+import { EfficiencyViewState, selectEfficiency, selectEfficiencyClass, selectEfficiencyDuration,  } from "store/efficiency";
 import { Vessel } from "generated/openapi";
 import { set } from "date-fns";
 
@@ -24,10 +24,11 @@ interface LeaderboardData {
 export const EfficiencyLeaderboard: FC = () => {
   const dispatch = useAppDispatch();
 
-  const selectedEfficiencies = useAppSelector(selectEfficiencies);
-  const efficiencies = useAppSelector(selectEfficiencies);
+  const selectedEfficiency = useAppSelector(selectEfficiency);
+  const selectedEfficiencyDuration = useAppSelector(selectEfficiencyDuration);
+
   const efficiencyClass = useAppSelector(selectEfficiencyClass);
-  
+
   const profile = useAppSelector(selectBwUserProfile);
   const vesselInfo = profile?.vesselInfo;
   const vessels = useAppSelector(selectVesselsByCallsign)
@@ -64,9 +65,9 @@ export const EfficiencyLeaderboard: FC = () => {
 
   var leaderBoardData: LeaderboardData[] = [];
 
-  selectedEfficiencies?.forEach((efficiency) => {
+  selectedEfficiencyDuration?.forEach((efficiency) => {
     var efficiencyData: string[] = [];
-    switch (efficiency) {
+    switch (selectedEfficiency) {
       case EfficiencyViewState.fishPerHour: {
         efficiencyData = [...medioVessels.map(([key, vessel]) => vessel.fishCaughtPerHour?.toFixed(1))]
         break;
@@ -101,7 +102,7 @@ export const EfficiencyLeaderboard: FC = () => {
     },
     notMerge: true,
     legend: {
-      data: selectedEfficiencies,
+      data: selectedEfficiencyDuration,
       selectedMode: false
     },
     grid: {

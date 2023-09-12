@@ -3,7 +3,7 @@ import ReactEChart from "echarts-for-react";
 import { FC, useRef} from "react";
 import { EfficiencyTheme } from "./EfficiencyTheme";
 
-import { selectEfficiencies, selectEfficiencyClass } from "store/efficiency";
+import { EfficiencyViewState, selectEfficiency, selectEfficiencyClass, selectEfficiencyDuration } from "store/efficiency";
 import { selectBwUserProfile, useAppSelector } from "store";
 
 interface GaugeData {
@@ -18,11 +18,17 @@ interface GaugeData {
     };
 }
 
-
-
 export const EfficiencyGauge: FC = () => {
 
-  const selectedEfficiencies = useAppSelector(selectEfficiencies);
+  const selectedEfficiency = useAppSelector(selectEfficiency);
+  if(!selectedEfficiency){
+    return <></>
+  }
+
+  const selectedEfficiencyDuration = useAppSelector(selectEfficiencyDuration);
+  if(!selectedEfficiencyDuration){
+    return <></>
+  }
   const efficiencyClass = useAppSelector(selectEfficiencyClass)
   const profile= useAppSelector(selectBwUserProfile);
   const vesselInfo = profile?.vesselInfo;
@@ -31,24 +37,42 @@ export const EfficiencyGauge: FC = () => {
 
   const our_index = efficiencyClass?.findIndex(([key, value]) => key === callsign);
 
-  let efficiency_score =( efficiencyClass?.[our_index!][1].fishCaughtPerHour  ?? 0 / efficiencyClass?.[0][1].fishCaughtPerHour! )* 100;
-  
 
 
-
-  if(!selectedEfficiencies){
-    return <></>
+  console.log(efficiencyClass)
+  let efficiency_score : number;
+  switch(selectedEfficiency){
+    case EfficiencyViewState.fishPerHour: {
+      efficiency_score =( (efficiencyClass?.[our_index!][1].fishCaughtPerHour  ?? 0) / (efficiencyClass?.[0][1].fishCaughtPerHour ?? 1) )* 100;
+      break;
+    }
+    case EfficiencyViewState.distancePerHour: {
+      efficiency_score = NaN
+      break;
+    }
+    default: {
+      efficiency_score = NaN
+      break;
+    }
   }
+  // console.log((efficiencyClass?.[our_index!][1].fishCaughtPerHour  ?? 0))
+  // console.log((efficiencyClass?.[0][1].fishCaughtPerHour ?? 1))
+  // console.log(efficiency_score)
+
+
+
+
+
 
   const displayScores : GaugeData[] = [];
 
-  const detailSize = 200 / (2 * selectedEfficiencies.length);
-  selectedEfficiencies?.forEach( (efficiency, index) => {
-    let detailPos = (100/selectedEfficiencies.length) + (detailSize * 2 * index) - 100;
+  const detailSize = 200 / (2 * selectedEfficiencyDuration!.length);
+  selectedEfficiencyDuration?.forEach( (duration, index) => {
+    let detailPos = (100/selectedEfficiencyDuration.length) + (detailSize * 2 * index) - 100;
     displayScores.push(
       {
         value: efficiency_score, // Need to get score from somewhere
-        name: efficiency,
+        name: duration,
         title: {
           offsetCenter: [detailPos.toString()+"%", '110%'],
           color: "white",
