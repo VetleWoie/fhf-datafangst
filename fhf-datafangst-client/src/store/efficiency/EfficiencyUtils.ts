@@ -1,6 +1,7 @@
 import { Vessel } from "generated/openapi";
 import { FiskInfoProfile } from "models";
 import { selectBwUserProfile, selectVesselsByCallsign, useAppSelector } from "store";
+import { EfficiencyDurationState } from "./state";
 
 
 
@@ -49,11 +50,12 @@ export const FilterVesselsOnClass = (profile? : FiskInfoProfile,vessels? : Recor
   }
 
   let data = Object.entries(filteredVessels)
-
-  data.sort(([, a], [, b]) => {
+  data.sort(([  ,a],[,b]) => {
     return b.fishCaughtPerHour! - a.fishCaughtPerHour!
   })
 
+  let record : Record<string,[string,Vessel][]> = {"day" : data};
 
-  return data
+
+  return record
 }

@@ -8,4 +8,9 @@ export const setSelectedEfficiency = createAction<EfficiencyViewState | undefine
 export const setSelectedEfficiencyDuration = createAction<EfficiencyDurationState[] | undefined>(
   "efficiency/setSelectedEfficiencyDuration",
 )
+export const setSelectedEfficiencyDetailOpen = createAction<boolean >(
+  "efficiency/setSelectedEfficiencyDetailOpen",
+)
+
+
 

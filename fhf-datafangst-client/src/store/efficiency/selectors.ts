@@ -5,6 +5,10 @@ export const selectEfficiency = createSelector(
   selectAppState,
   (state) => state.selectedEfficiency,
 );
+export const selectEfficiencyDetailOpen= createSelector(
+  selectAppState,
+  (state) => state.selectedEfficiencyDetailOpen,
+);
 
 export const selectEfficiencyDuration = createSelector(
   selectAppState,

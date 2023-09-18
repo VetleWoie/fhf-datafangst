@@ -53,7 +53,7 @@ import {
   MatrixToggle,
   selectTripDetailsOpen,
 } from "store";
-import { selectEfficiency } from "store/efficiency";
+import { selectEfficiency ,selectEfficiencyDetailOpen} from "store/efficiency";
 import { MinErsYear, MinLandingYear } from "utils";
 
 export interface MapFilter {
@@ -127,7 +127,7 @@ const MenuArea = (props: any) => (
 const HaulMenuArea = (props: any) => (
   <Box
     sx={{
-      gridColumnStart: 3,
+      gridColumnStart: props.open ? 2 : 3,
       gridColumnEnd: 4,
       gridRowStart: 2,
       gridRowEnd: 5,
@@ -218,6 +218,7 @@ export const HomeView: FC = () => {
   const matrixToggle = useAppSelector(selectMatrixToggle);
   const selectedEfficiency = useAppSelector(selectEfficiency);
   const tripDetailsOpen = useAppSelector(selectTripDetailsOpen);
+  const efficiencyDetailOpen = useAppSelector(selectEfficiencyDetailOpen);
 
   // Fetch hauls for selected grid
   useEffect(() => {
@@ -263,7 +264,7 @@ export const HomeView: FC = () => {
         <FilterButtonArea open={secondaryMenuOpen}>
           <MapFilters mapFilter={mapFilter} onFilterChange={setMapFilter} />
         </FilterButtonArea>
-        <HaulMenuArea>
+        <HaulMenuArea open={efficiencyDetailOpen}>
           {/* Use grid to set Trip menu in front when active, without removing HaulsMenu and its state */}
           <Box sx={{ display: "grid", height: "100%" }}>
             <Box sx={{ gridRow: 1, gridColumn: 1, overflowY: "auto" }}>

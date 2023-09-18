@@ -32,6 +32,7 @@ export const EfficiencyLeaderboard: FC = () => {
   const profile = useAppSelector(selectBwUserProfile);
   const vesselInfo = profile?.vesselInfo;
   const vessels = useAppSelector(selectVesselsByCallsign)
+  console.log(vessels)
   const vessel = vesselInfo?.ircs ? vessels[vesselInfo.ircs] : undefined;
   const callsign = vesselInfo?.ircs ?? "";
 
@@ -55,21 +56,16 @@ export const EfficiencyLeaderboard: FC = () => {
     return vessels?.slice(index - num_closest, index + num_closest)
   }
 
-  let medioVessels = efficiencyClass
+  // let medioVessels = efficiencyClass
 
-  console.log(medioVessels)
-
-  if(!medioVessels){
-    return <></>;
-  }
 
   var leaderBoardData: LeaderboardData[] = [];
 
-  selectedEfficiencyDuration?.forEach((efficiency) => {
+  selectedEfficiencyDuration?.forEach((duration) => {
     var efficiencyData: string[] = [];
     switch (selectedEfficiency) {
       case EfficiencyViewState.fishPerHour: {
-        efficiencyData = [...medioVessels.map(([key, vessel]) => vessel.fishCaughtPerHour?.toFixed(1))]
+        efficiencyData = [...efficiencyClass[duration].map(([key, vessel]) => vessel.fishCaughtPerHour?.toFixed(1))]
         break;
       }
       case EfficiencyViewState.distancePerHour: {
@@ -84,7 +80,7 @@ export const EfficiencyLeaderboard: FC = () => {
 
     leaderBoardData.push(
       {
-        name: efficiency,
+        name: duration,
         type: 'bar',
         label: seriesLabel,
         data: efficiencyData,
@@ -117,7 +113,7 @@ export const EfficiencyLeaderboard: FC = () => {
     yAxis: {
       type: 'category',
       inverse: true,
-      data: [...medioVessels.map(([key, vessel]) => vessel.fiskeridir?.name ?? key)],
+      data: [...efficiencyClass["day"].map(([key, vessel]) => vessel.fiskeridir?.name ?? key)],
       axisLabel: {
         formatter: '{value}',
         margin: 20,

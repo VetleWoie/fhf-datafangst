@@ -16,8 +16,8 @@ export enum EfficiencyDurationState {
 export interface EfficiencyState {
   selectedEfficiency?: EfficiencyViewState;
   selectedEfficienciyDuration?: EfficiencyDurationState[];
-  efficiencyClass? : [string,Vessel][];
-
+  selectedEfficiencyDetailOpen: boolean;
+  efficiencyClass? : Record<string , [string,Vessel][]>;
 }
 
 
@@ -25,4 +25,5 @@ export const initalEfficiencyState: EfficiencyState = {
   selectedEfficiency : undefined,
   selectedEfficienciyDuration : undefined,
   efficiencyClass : undefined,
+  selectedEfficiencyDetailOpen : false,
 };
