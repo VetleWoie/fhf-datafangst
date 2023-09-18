@@ -73,7 +73,7 @@ export const EfficiencyMenu: FC = () => {
         </IconButton>
 
       </Box>
-      {open && <Box
+      {open ? <Box
 
         sx={{
           height: "100%",
@@ -85,16 +85,17 @@ export const EfficiencyMenu: FC = () => {
         }}
         >
 
+        {'iNSERT SOMETINH'}
 
-
-      </Box>}
+      </Box> :
+      
       <Drawer
         sx={{
           height: "100%",
           width: "100%",
           zIndex: 5000,
           flexShrink: 1,
-          
+
           "& .MuiDrawer-paper": {
             position: "relative",
             backgroundColor: "primary.main",
@@ -141,6 +142,8 @@ export const EfficiencyMenu: FC = () => {
         <Divider sx={{ bgcolor: "text.secondary", mb: 2, mx: 4 }} />
         <EfficiencyLeaderboard />
       </Drawer>
+
+     }
     </Box>
   );
 }
