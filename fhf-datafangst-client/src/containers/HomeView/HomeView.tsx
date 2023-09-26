@@ -124,7 +124,7 @@ const MenuArea = (props: any) => (
   </Box>
 );
 
-const HaulMenuArea = (props: any) => (
+const HaulMenuArea = (props: { open: boolean; children: any }) => (
   <Box
     sx={{
       gridColumnStart: props.open ? 2 : 3,

@@ -46,3 +46,7 @@ export { SortingFilter } from "./MainMenu/SearchFilters/SortingFilter";
 export { SearchFilters } from "./MainMenu/SearchFilters/SearchFilters";
 export { MyEfficiency } from "./MyPage/MyEfficiency"
 export { TripDetails } from "./TripDetails/TripDetails";
+export {Layout as BenchmarkLayout } from "./BenchmarkLayout/Layout"
+export {Header as BenchmarkHeader} from "./BenchmarkLayout/Header"
+export {HeaderMenuButtons as BenchmarkHeaderMenuButtons } from "./BenchmarkLayout/HeaderMenuButtons"
+export {MainMenu as BenchmarkMenu } from "./BenchmarkMenu/MainMenu"

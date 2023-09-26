@@ -18,7 +18,7 @@ interface GaugeData {
   };
 }
 
-export const EfficiencyGauge: FC = () => {
+export const EfficiencyGauge: FC = (props : any) => {
 
   const selectedEfficiency = useAppSelector(selectEfficiency);
   if (!selectedEfficiency) {
@@ -49,8 +49,8 @@ export const EfficiencyGauge: FC = () => {
     let efficiency_score: number;
     switch (selectedEfficiency) {
       case EfficiencyViewState.fishPerHour: {
-        efficiency_score = ((efficiencyClass[duration]?.[our_index!][1].fishCaughtPerHour ?? 0) 
-                          / (efficiencyClass[duration]?.[0][1].fishCaughtPerHour ?? 1)) * 100;
+        efficiency_score = (((efficiencyClass[duration]?.[our_index!][1].fishCaughtPerHour ?? 0) 
+                          / (efficiencyClass[duration]?.[0][1].fishCaughtPerHour ?? 1)) * 100 ) - Math.random();
         break;
       }
       case EfficiencyViewState.distancePerHour: {
