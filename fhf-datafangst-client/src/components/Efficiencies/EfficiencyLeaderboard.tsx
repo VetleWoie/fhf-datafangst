@@ -21,7 +21,7 @@ interface LeaderboardData {
   data: string[];
 }
 
-export const EfficiencyLeaderboard: FC = () => {
+export const EfficiencyLeaderboard: FC<any> = (props : any) => {
   const dispatch = useAppDispatch();
 
   const selectedEfficiency = useAppSelector(selectEfficiency);
@@ -98,7 +98,7 @@ export const EfficiencyLeaderboard: FC = () => {
     },
     notMerge: true,
     legend: {
-      data: selectedEfficiencyDuration,
+      data: props.title ?? 'Day',
       selectedMode: false
     },
     grid: {
@@ -130,9 +130,9 @@ export const EfficiencyLeaderboard: FC = () => {
         color: "white",
         backgroundColor: "primary.main"
       }}>
-      <Box>
+      {/* <Box>
         <Typography variant="h5">Poengtavle</Typography>
-      </Box>
+      </Box> */}
       <Box>
         <ReactEChart
           option={eChartsOption}

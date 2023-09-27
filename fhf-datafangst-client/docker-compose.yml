@@ -7,3 +7,4 @@ services:
     volumes:
       - ./:/code
     command: npm run start
+    network_mode: host

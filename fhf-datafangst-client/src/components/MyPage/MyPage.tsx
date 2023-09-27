@@ -31,12 +31,14 @@ import PhishingSharpIcon from "@mui/icons-material/PhishingSharp";
 import SpeedIcon from '@mui/icons-material/Speed';
 
 import { useAuth } from "oidc-react";
+import { VesselFinder } from "./VesselFinder";
 
 enum MenuTab {
   Trips = "trips",
   Hauls = "hauls",
   Gears = "gears",
   Efficiency = "Efficiency",
+  Following = "Following"
 }
 
 const accordionSx = {
@@ -243,6 +245,32 @@ export const MyPage: FC = () => {
         </AccordionSummary>
         <AccordionDetails sx={{ pb: 0 }}>
           <MyEfficiency></MyEfficiency>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion
+        square
+        disableGutters
+        sx={accordionSx}
+        expanded={expanded === MenuTab.Following}
+        onChange={() => handleTabChange(MenuTab.Following)}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              "& svg": { mr: 2 },
+            }}
+          >
+            <SpeedIcon
+              sx={{ color: "secondary.light", fontSize: 32 }}
+            />
+          </Box>
+          <Typography variant="h6"> Mine følgere </Typography>
+        </AccordionSummary>
+        <AccordionDetails sx={{ pb: 0 }}>
+          <VesselFinder></VesselFinder>
         </AccordionDetails>
       </Accordion>
     </Box>

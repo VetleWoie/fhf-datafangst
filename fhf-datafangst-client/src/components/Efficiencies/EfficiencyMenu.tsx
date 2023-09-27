@@ -25,6 +25,7 @@ import { EfficiencyLeaderboard } from "./EfficiencyLeaderboard";
 
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import ArrowForwardIosNewRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
+import { BenchmarkView } from "./BenchmarkView";
 
 export const EfficiencyMenu: FC = () => {
   const efficiency = useAppSelector(selectEfficiency);
@@ -79,13 +80,12 @@ export const EfficiencyMenu: FC = () => {
           height: "100%",
           width: "100%",
           zIndex: 5000,
-          flex: "auto",
           backgroundColor : "primary.main",
           color : "white",
         }}
         >
 
-        {'iNSERT SOMETINH'}
+        <BenchmarkView />
 
       </Box> :
       

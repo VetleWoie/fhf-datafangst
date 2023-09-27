@@ -39,11 +39,11 @@ export const MyEfficiency: FC = () => {
 
   let durationButtons : ReactElement[] = [];
 
-  Object.keys(EfficiencyDurationState).forEach((duration)=>{
-    durationButtons.push(
-      <ToggleButton key={duration} value={duration}> {duration} </ToggleButton>
-    )
-  })
+  // Object.keys(EfficiencyDurationState).forEach((duration)=>{
+  //   durationButtons.push(
+  //     <ToggleButton key={duration} value={duration}> {duration} </ToggleButton>
+  //   )
+  // })
   return (
     <Box sx={{ height: "100%", px: 2.5, py: 1 }}>
       <Box
@@ -73,8 +73,8 @@ export const MyEfficiency: FC = () => {
           handleChange(newValue)
         }
         >
-          <ToggleButton value={EfficiencyViewState.timePerHour}> Tidsforbruk per time </ToggleButton>
-          <ToggleButton value={EfficiencyViewState.distancePerHour}> Distanse per time</ToggleButton>
+          {/* <ToggleButton value={EfficiencyViewState.timePerHour}> Tidsforbruk per time </ToggleButton> */}
+          <ToggleButton value={EfficiencyViewState.distancePerHour}> Vekt per distanse</ToggleButton>
           <ToggleButton value={EfficiencyViewState.fishPerHour}> Fisk per time </ToggleButton>
 
         </ToggleButtonGroup>
