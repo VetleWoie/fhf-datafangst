@@ -32,6 +32,7 @@ import SpeedIcon from '@mui/icons-material/Speed';
 
 import { useAuth } from "oidc-react";
 import { VesselFinder } from "./VesselFinder";
+import { PeopleOutline } from "@mui/icons-material";
 
 enum MenuTab {
   Trips = "trips",
@@ -263,7 +264,7 @@ export const MyPage: FC = () => {
               "& svg": { mr: 2 },
             }}
           >
-            <SpeedIcon
+            <PeopleOutline
               sx={{ color: "secondary.light", fontSize: 32 }}
             />
           </Box>

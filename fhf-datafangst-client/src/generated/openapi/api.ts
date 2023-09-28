@@ -415,6 +415,31 @@ export interface ApiErrorOneOfStartAfterEnd {
 /**
  * 
  * @export
+ * @interface Benchmark
+ */
+export interface Benchmark {
+    /**
+     * 
+     * @type {number}
+     * @memberof Benchmark
+     */
+    'benchmarkId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Benchmark
+     */
+    'output'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Benchmark
+     */
+    'vesselId': number;
+}
+/**
+ * 
+ * @export
  * @interface Catch
  */
 export interface Catch {
@@ -948,6 +973,84 @@ export interface GearMainGroup {
 export interface Haul {
     /**
      * 
+     * @type {number}
+     * @memberof Haul
+     */
+    'airPressureAtSeaLevel'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Haul
+     */
+    'airTemperature2m'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Haul
+     */
+    'cloudAreaFraction'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Haul
+     */
+    'precipitationAmount'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Haul
+     */
+    'relativeHumidity2m'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Haul
+     */
+    'windDirection10m'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Haul
+     */
+    'windSpeed10m'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Haul
+     */
+    'oceanClimateDepth'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Haul
+     */
+    'salinity'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Haul
+     */
+    'seaFloorDepth'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Haul
+     */
+    'waterDirection'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Haul
+     */
+    'waterSpeed'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Haul
+     */
+    'waterTemperature'?: number | null;
+    /**
+     * 
      * @type {string}
      * @memberof Haul
      */
@@ -1112,6 +1215,175 @@ export interface Haul {
 /**
  * 
  * @export
+ * @interface HaulAllOf
+ */
+export interface HaulAllOf {
+    /**
+     * 
+     * @type {string}
+     * @memberof HaulAllOf
+     */
+    'catchLocationStart'?: string | null;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof HaulAllOf
+     */
+    'catchLocations'?: Array<string> | null;
+    /**
+     * 
+     * @type {Array<HaulCatch>}
+     * @memberof HaulAllOf
+     */
+    'catches': Array<HaulCatch>;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulAllOf
+     */
+    'duration': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof HaulAllOf
+     */
+    'ersActivityId': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulAllOf
+     */
+    'fiskeridirVesselId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulAllOf
+     */
+    'gearGroupId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulAllOf
+     */
+    'gearId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulAllOf
+     */
+    'haulDistance'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulAllOf
+     */
+    'haulId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulAllOf
+     */
+    'oceanDepthEnd': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulAllOf
+     */
+    'oceanDepthStart': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulAllOf
+     */
+    'quotaTypeId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulAllOf
+     */
+    'startLatitude': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulAllOf
+     */
+    'startLongitude': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof HaulAllOf
+     */
+    'startTimestamp': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulAllOf
+     */
+    'stopLatitude': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulAllOf
+     */
+    'stopLongitude': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof HaulAllOf
+     */
+    'stopTimestamp': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulAllOf
+     */
+    'totalLivingWeight': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof HaulAllOf
+     */
+    'vesselCallSign'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof HaulAllOf
+     */
+    'vesselCallSignErs': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulAllOf
+     */
+    'vesselLength': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulAllOf
+     */
+    'vesselLengthGroup': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof HaulAllOf
+     */
+    'vesselName'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof HaulAllOf
+     */
+    'vesselNameErs'?: string | null;
+    /**
+     * 
+     * @type {Array<WhaleCatch>}
+     * @memberof HaulAllOf
+     */
+    'whaleCatches': Array<WhaleCatch>;
+}
+/**
+ * 
+ * @export
  * @interface HaulCatch
  */
 export interface HaulCatch {
@@ -1133,6 +1405,98 @@ export interface HaulCatch {
      * @memberof HaulCatch
      */
     'speciesGroupId': number;
+}
+/**
+ * 
+ * @export
+ * @interface HaulOceanClimate
+ */
+export interface HaulOceanClimate {
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulOceanClimate
+     */
+    'oceanClimateDepth'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulOceanClimate
+     */
+    'salinity'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulOceanClimate
+     */
+    'seaFloorDepth'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulOceanClimate
+     */
+    'waterDirection'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulOceanClimate
+     */
+    'waterSpeed'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulOceanClimate
+     */
+    'waterTemperature'?: number | null;
+}
+/**
+ * 
+ * @export
+ * @interface HaulWeather
+ */
+export interface HaulWeather {
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulWeather
+     */
+    'airPressureAtSeaLevel'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulWeather
+     */
+    'airTemperature2m'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulWeather
+     */
+    'cloudAreaFraction'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulWeather
+     */
+    'precipitationAmount'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulWeather
+     */
+    'relativeHumidity2m'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulWeather
+     */
+    'windDirection10m'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof HaulWeather
+     */
+    'windSpeed10m'?: number | null;
 }
 /**
  * 
@@ -1614,6 +1978,24 @@ export interface Trip {
      * @type {string}
      * @memberof Trip
      */
+    'landingCoverageEnd': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Trip
+     */
+    'landingCoverageStart': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof Trip
+     */
+    'landingIds': Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof Trip
+     */
     'mostRecentDeliveryDate'?: string | null;
     /**
      * 
@@ -1635,11 +2017,33 @@ export interface Trip {
     'startPortId'?: string | null;
     /**
      * 
+     * @type {TripAssemblerId}
+     * @memberof Trip
+     */
+    'tripAssemblerId': TripAssemblerId;
+    /**
+     * 
      * @type {number}
      * @memberof Trip
      */
     'tripId': number;
 }
+
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const TripAssemblerId = {
+    Landings: 'Landings',
+    Ers: 'Ers'
+} as const;
+
+export type TripAssemblerId = typeof TripAssemblerId[keyof typeof TripAssemblerId];
+
+
 /**
  * 
  * @export
@@ -1698,6 +2102,12 @@ export interface Vessel {
      * @memberof Vessel
      */
     'gearGroups': Array<number>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof Vessel
+     */
+    'speciesGroups': Array<number>;
 }
 /**
  * 
@@ -1772,6 +2182,104 @@ export interface VmsPosition {
      * @memberof VmsPosition
      */
     'timestamp': string;
+}
+/**
+ * 
+ * @export
+ * @interface Weather
+ */
+export interface Weather {
+    /**
+     * 
+     * @type {number}
+     * @memberof Weather
+     */
+    'airPressureAtSeaLevel'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Weather
+     */
+    'airTemperature2m'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Weather
+     */
+    'altitude': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Weather
+     */
+    'cloudAreaFraction'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Weather
+     */
+    'landAreaFraction': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Weather
+     */
+    'latitude': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Weather
+     */
+    'longitude': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Weather
+     */
+    'precipitationAmount'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Weather
+     */
+    'relativeHumidity2m'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Weather
+     */
+    'timestamp': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Weather
+     */
+    'windDirection10m'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Weather
+     */
+    'windSpeed10m'?: number | null;
+}
+/**
+ * 
+ * @export
+ * @interface WeatherLocation
+ */
+export interface WeatherLocation {
+    /**
+     * 
+     * @type {number}
+     * @memberof WeatherLocation
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof WeatherLocation
+     */
+    'polygon': string;
 }
 /**
  * 
@@ -2135,6 +2643,100 @@ export class V1aisVmsApi extends BaseAPI {
      */
     public aisVmsPositions(requestParameters: V1aisVmsApiAisVmsPositionsRequest = {}, options?: AxiosRequestConfig) {
         return V1aisVmsApiFp(this.configuration).aisVmsPositions(requestParameters.mmsi, requestParameters.callSign, requestParameters.start, requestParameters.end, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * V1benchmarkApi - axios parameter creator
+ * @export
+ */
+export const V1benchmarkApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        benchmark: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/v1.0/benchmark`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * V1benchmarkApi - functional programming interface
+ * @export
+ */
+export const V1benchmarkApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = V1benchmarkApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async benchmark(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<number>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.benchmark(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * V1benchmarkApi - factory interface
+ * @export
+ */
+export const V1benchmarkApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = V1benchmarkApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        benchmark(options?: AxiosRequestConfig): AxiosPromise<Array<number>> {
+            return localVarFp.benchmark(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * V1benchmarkApi - object-oriented interface
+ * @export
+ * @class V1benchmarkApi
+ * @extends {BaseAPI}
+ */
+export class V1benchmarkApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof V1benchmarkApi
+     */
+    public benchmark(options?: AxiosRequestConfig) {
+        return V1benchmarkApiFp(this.configuration).benchmark(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2686,12 +3288,16 @@ export const V1haulApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {string} [speciesGroupIds] 
          * @param {string} [vesselLengthRanges] 
          * @param {string} [fiskeridirVesselIds] 
+         * @param {number} [minWindSpeed] 
+         * @param {number} [maxWindSpeed] 
+         * @param {number} [minAirTemperature] 
+         * @param {number} [maxAirTemperature] 
          * @param {HaulsSorting} [sorting] 
          * @param {Ordering} [ordering] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        hauls: async (months?: string, catchLocations?: string, gearGroupIds?: string, speciesGroupIds?: string, vesselLengthRanges?: string, fiskeridirVesselIds?: string, sorting?: HaulsSorting, ordering?: Ordering, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        hauls: async (months?: string, catchLocations?: string, gearGroupIds?: string, speciesGroupIds?: string, vesselLengthRanges?: string, fiskeridirVesselIds?: string, minWindSpeed?: number, maxWindSpeed?: number, minAirTemperature?: number, maxAirTemperature?: number, sorting?: HaulsSorting, ordering?: Ordering, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v1.0/hauls`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2726,6 +3332,22 @@ export const V1haulApiAxiosParamCreator = function (configuration?: Configuratio
 
             if (fiskeridirVesselIds !== undefined) {
                 localVarQueryParameter['fiskeridirVesselIds'] = fiskeridirVesselIds;
+            }
+
+            if (minWindSpeed !== undefined) {
+                localVarQueryParameter['minWindSpeed'] = minWindSpeed;
+            }
+
+            if (maxWindSpeed !== undefined) {
+                localVarQueryParameter['maxWindSpeed'] = maxWindSpeed;
+            }
+
+            if (minAirTemperature !== undefined) {
+                localVarQueryParameter['minAirTemperature'] = minAirTemperature;
+            }
+
+            if (maxAirTemperature !== undefined) {
+                localVarQueryParameter['maxAirTemperature'] = maxAirTemperature;
             }
 
             if (sorting !== undefined) {
@@ -2828,13 +3450,17 @@ export const V1haulApiFp = function(configuration?: Configuration) {
          * @param {string} [speciesGroupIds] 
          * @param {string} [vesselLengthRanges] 
          * @param {string} [fiskeridirVesselIds] 
+         * @param {number} [minWindSpeed] 
+         * @param {number} [maxWindSpeed] 
+         * @param {number} [minAirTemperature] 
+         * @param {number} [maxAirTemperature] 
          * @param {HaulsSorting} [sorting] 
          * @param {Ordering} [ordering] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async hauls(months?: string, catchLocations?: string, gearGroupIds?: string, speciesGroupIds?: string, vesselLengthRanges?: string, fiskeridirVesselIds?: string, sorting?: HaulsSorting, ordering?: Ordering, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Haul>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.hauls(months, catchLocations, gearGroupIds, speciesGroupIds, vesselLengthRanges, fiskeridirVesselIds, sorting, ordering, options);
+        async hauls(months?: string, catchLocations?: string, gearGroupIds?: string, speciesGroupIds?: string, vesselLengthRanges?: string, fiskeridirVesselIds?: string, minWindSpeed?: number, maxWindSpeed?: number, minAirTemperature?: number, maxAirTemperature?: number, sorting?: HaulsSorting, ordering?: Ordering, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Haul>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.hauls(months, catchLocations, gearGroupIds, speciesGroupIds, vesselLengthRanges, fiskeridirVesselIds, minWindSpeed, maxWindSpeed, minAirTemperature, maxAirTemperature, sorting, ordering, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -2870,7 +3496,7 @@ export const V1haulApiFactory = function (configuration?: Configuration, basePat
          * @throws {RequiredError}
          */
         hauls(requestParameters: V1haulApiHaulsRequest = {}, options?: AxiosRequestConfig): AxiosPromise<Array<Haul>> {
-            return localVarFp.hauls(requestParameters.months, requestParameters.catchLocations, requestParameters.gearGroupIds, requestParameters.speciesGroupIds, requestParameters.vesselLengthRanges, requestParameters.fiskeridirVesselIds, requestParameters.sorting, requestParameters.ordering, options).then((request) => request(axios, basePath));
+            return localVarFp.hauls(requestParameters.months, requestParameters.catchLocations, requestParameters.gearGroupIds, requestParameters.speciesGroupIds, requestParameters.vesselLengthRanges, requestParameters.fiskeridirVesselIds, requestParameters.minWindSpeed, requestParameters.maxWindSpeed, requestParameters.minAirTemperature, requestParameters.maxAirTemperature, requestParameters.sorting, requestParameters.ordering, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2931,6 +3557,34 @@ export interface V1haulApiHaulsRequest {
      * @memberof V1haulApiHauls
      */
     readonly fiskeridirVesselIds?: string
+
+    /**
+     * 
+     * @type {number}
+     * @memberof V1haulApiHauls
+     */
+    readonly minWindSpeed?: number
+
+    /**
+     * 
+     * @type {number}
+     * @memberof V1haulApiHauls
+     */
+    readonly maxWindSpeed?: number
+
+    /**
+     * 
+     * @type {number}
+     * @memberof V1haulApiHauls
+     */
+    readonly minAirTemperature?: number
+
+    /**
+     * 
+     * @type {number}
+     * @memberof V1haulApiHauls
+     */
+    readonly maxAirTemperature?: number
 
     /**
      * 
@@ -3018,7 +3672,7 @@ export class V1haulApi extends BaseAPI {
      * @memberof V1haulApi
      */
     public hauls(requestParameters: V1haulApiHaulsRequest = {}, options?: AxiosRequestConfig) {
-        return V1haulApiFp(this.configuration).hauls(requestParameters.months, requestParameters.catchLocations, requestParameters.gearGroupIds, requestParameters.speciesGroupIds, requestParameters.vesselLengthRanges, requestParameters.fiskeridirVesselIds, requestParameters.sorting, requestParameters.ordering, options).then((request) => request(this.axios, this.basePath));
+        return V1haulApiFp(this.configuration).hauls(requestParameters.months, requestParameters.catchLocations, requestParameters.gearGroupIds, requestParameters.speciesGroupIds, requestParameters.vesselLengthRanges, requestParameters.fiskeridirVesselIds, requestParameters.minWindSpeed, requestParameters.maxWindSpeed, requestParameters.minAirTemperature, requestParameters.maxAirTemperature, requestParameters.sorting, requestParameters.ordering, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4745,6 +5399,208 @@ export class V1vmsApi extends BaseAPI {
      */
     public vmsPositions(requestParameters: V1vmsApiVmsPositionsRequest, options?: AxiosRequestConfig) {
         return V1vmsApiFp(this.configuration).vmsPositions(requestParameters.callSign, requestParameters.start, requestParameters.end, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * V1weatherApi - axios parameter creator
+ * @export
+ */
+export const V1weatherApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} [startDate] 
+         * @param {string} [endDate] 
+         * @param {string} [weatherLocationIds] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        weather: async (startDate?: string, endDate?: string, weatherLocationIds?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/v1.0/weather`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (startDate !== undefined) {
+                localVarQueryParameter['startDate'] = (startDate as any instanceof Date) ?
+                    (startDate as any).toISOString() :
+                    startDate;
+            }
+
+            if (endDate !== undefined) {
+                localVarQueryParameter['endDate'] = (endDate as any instanceof Date) ?
+                    (endDate as any).toISOString() :
+                    endDate;
+            }
+
+            if (weatherLocationIds !== undefined) {
+                localVarQueryParameter['weatherLocationIds'] = weatherLocationIds;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        weatherLocations: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/v1.0/weather_locations`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * V1weatherApi - functional programming interface
+ * @export
+ */
+export const V1weatherApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = V1weatherApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} [startDate] 
+         * @param {string} [endDate] 
+         * @param {string} [weatherLocationIds] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async weather(startDate?: string, endDate?: string, weatherLocationIds?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Weather>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.weather(startDate, endDate, weatherLocationIds, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async weatherLocations(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<WeatherLocation>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.weatherLocations(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * V1weatherApi - factory interface
+ * @export
+ */
+export const V1weatherApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = V1weatherApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {V1weatherApiWeatherRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        weather(requestParameters: V1weatherApiWeatherRequest = {}, options?: AxiosRequestConfig): AxiosPromise<Array<Weather>> {
+            return localVarFp.weather(requestParameters.startDate, requestParameters.endDate, requestParameters.weatherLocationIds, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        weatherLocations(options?: AxiosRequestConfig): AxiosPromise<Array<WeatherLocation>> {
+            return localVarFp.weatherLocations(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * Request parameters for weather operation in V1weatherApi.
+ * @export
+ * @interface V1weatherApiWeatherRequest
+ */
+export interface V1weatherApiWeatherRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof V1weatherApiWeather
+     */
+    readonly startDate?: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof V1weatherApiWeather
+     */
+    readonly endDate?: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof V1weatherApiWeather
+     */
+    readonly weatherLocationIds?: string
+}
+
+/**
+ * V1weatherApi - object-oriented interface
+ * @export
+ * @class V1weatherApi
+ * @extends {BaseAPI}
+ */
+export class V1weatherApi extends BaseAPI {
+    /**
+     * 
+     * @param {V1weatherApiWeatherRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof V1weatherApi
+     */
+    public weather(requestParameters: V1weatherApiWeatherRequest = {}, options?: AxiosRequestConfig) {
+        return V1weatherApiFp(this.configuration).weather(requestParameters.startDate, requestParameters.endDate, requestParameters.weatherLocationIds, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof V1weatherApi
+     */
+    public weatherLocations(options?: AxiosRequestConfig) {
+        return V1weatherApiFp(this.configuration).weatherLocations(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
