@@ -4,6 +4,7 @@ import { MapFilter } from "containers/HomeView/HomeView";
 import LayersIcon from "@mui/icons-material/Layers";
 import { CoastlineIcon } from "assets/icons";
 import MapSharpIcon from "@mui/icons-material/MapSharp";
+import { LocalFireDepartmentOutlined } from "@mui/icons-material";
 
 interface Props {
   mapFilter: MapFilter;
@@ -71,6 +72,13 @@ export const MapFilters: FC<Props> = (props) => {
           onClick={() => handleChange("seamap")}
           icon={<MapSharpIcon />}
           tooltipTitle={"Vis sjøkart"}
+          tooltipPlacement="left"
+        />
+        <SpeedDialAction
+          sx={mapFilter.heatmap ? activeStyle : {}}
+          onClick={() => handleChange("heatmap")}
+          icon={<LocalFireDepartmentOutlined/>}
+          tooltipTitle={"Heatmap"}
           tooltipPlacement="left"
         />
       </SpeedDial>

@@ -59,12 +59,14 @@ import { MinErsYear, MinLandingYear } from "utils";
 export interface MapFilter {
   coastline: boolean;
   seamap: boolean;
+  heatmap: boolean;
   [key: string]: boolean;
 }
 
 const initialMapFilter: MapFilter = {
   coastline: false,
   seamap: false,
+  heatmap: false,
 };
 
 const GridContainer = (props: any) => (
@@ -334,6 +336,7 @@ export const HomeView: FC = () => {
         {showGrid && <LocationsGrid />}
         {mapFilter.coastline && <ShorelineLayer />}
         {mapFilter.seamap && <SeamapLayer />}
+        {mapFilter.heatmap && <PositionHeatMapLayer/>}
         <HaulsLayer />
         {!selectedTrip && <TrackLayer />}
         {(selectedTrip ?? selectedCurrentTrip) && <TripsLayer />}
