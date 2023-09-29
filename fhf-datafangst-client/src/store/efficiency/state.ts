@@ -1,9 +1,9 @@
-import { Vessel } from "generated/openapi";
+import { Benchmark, Vessel } from "generated/openapi";
 
 export enum EfficiencyViewState {
-  timePerHour = "timePerHour",
-  distancePerHour = "distancePerHour",
-  fishPerHour = "FishPerHour"
+  weightPerDistance= "weightPerDistance",
+  weightPerHour= "WeightPerHour",
+  totalWeight= "totalWeight",
 }
 
 export enum EfficiencyDurationState {
@@ -18,6 +18,7 @@ export interface EfficiencyState {
   selectedEfficienciyDuration?: EfficiencyDurationState[];
   selectedEfficiencyDetailOpen: boolean;
   efficiencyClass? : Record<string , [string,Vessel][]>;
+  benchmarks?:  Benchmark[];
 }
 
 
@@ -26,4 +27,5 @@ export const initalEfficiencyState: EfficiencyState = {
   selectedEfficienciyDuration : undefined,
   efficiencyClass : undefined,
   selectedEfficiencyDetailOpen : false,
+  benchmarks:  undefined,
 };

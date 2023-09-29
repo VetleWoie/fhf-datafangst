@@ -74,8 +74,9 @@ export const MyEfficiency: FC = () => {
         }
         >
           {/* <ToggleButton value={EfficiencyViewState.timePerHour}> Tidsforbruk per time </ToggleButton> */}
-          <ToggleButton value={EfficiencyViewState.distancePerHour}> Vekt per distanse</ToggleButton>
-          <ToggleButton value={EfficiencyViewState.fishPerHour}> Fisk per time </ToggleButton>
+          <ToggleButton value={EfficiencyViewState.weightPerDistance}> Vekt per distanse</ToggleButton>
+          <ToggleButton value={EfficiencyViewState.weightPerHour}> Vekt per time </ToggleButton>
+          <ToggleButton value={EfficiencyViewState.totalWeight}> Totalvekt </ToggleButton>
 
         </ToggleButtonGroup>
       </Box>

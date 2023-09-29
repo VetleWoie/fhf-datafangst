@@ -19,3 +19,5 @@ export const selectEfficiencyClass = createSelector(
   selectAppState,
   (state) => state.efficiencyClass,
 )
+
+export const selectBenchmarks = createSelector(selectAppState, (state) => state.benchmarks);

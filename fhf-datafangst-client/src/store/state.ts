@@ -17,7 +17,6 @@ import {
 import { initialUserState, UserState } from "./user";
 import { LandingState, initialLandingState } from "./landing";
 import { init } from "echarts";
-import { initialFollowerState, FollowerState } from "./follower";
 
 export enum MenuViewState {
   Overview = "overview",

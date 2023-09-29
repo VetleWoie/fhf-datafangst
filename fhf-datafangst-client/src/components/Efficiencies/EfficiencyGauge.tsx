@@ -40,11 +40,11 @@ export const EfficiencyGauge: FC = () => {
 
 
   const displayScores: GaugeData[] = [];
-  console.log(efficiencyClass)
+  // console.log(efficiencyClass)
 
   const detailSize = 200 / (2 * selectedEfficiencyDuration!.length);
   selectedEfficiencyDuration?.forEach((duration, index) => {
-    console.log(duration, efficiencyClass)
+    // console.log(duration, efficiencyClass)
     const our_index = efficiencyClass[duration].findIndex(([key, value]) => key === callsign);
     let efficiency_score: number;
     switch (selectedEfficiency) {

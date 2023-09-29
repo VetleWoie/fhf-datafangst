@@ -420,10 +420,10 @@ export interface ApiErrorOneOfStartAfterEnd {
 export interface Benchmark {
     /**
      * 
-     * @type {number}
+     * @type {VesselBenchmarkId}
      * @memberof Benchmark
      */
-    'benchmarkId': number;
+    'benchmarkId': VesselBenchmarkId;
     /**
      * 
      * @type {number}
@@ -437,6 +437,8 @@ export interface Benchmark {
      */
     'vesselId': number;
 }
+
+
 /**
  * 
  * @export
@@ -2112,6 +2114,44 @@ export interface Vessel {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+
+export const VesselBenchmarkId = {
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_3: 3,
+    NUMBER_4: 4,
+    NUMBER_5: 5,
+    NUMBER_6: 6,
+    NUMBER_7: 7,
+    NUMBER_8: 8,
+    NUMBER_9: 9,
+    NUMBER_10: 10,
+    NUMBER_11: 11,
+    NUMBER_12: 12,
+    NUMBER_13: 13,
+    NUMBER_14: 14,
+    NUMBER_15: 15,
+    NUMBER_16: 16,
+    NUMBER_17: 17,
+    NUMBER_18: 18,
+    NUMBER_19: 19,
+    NUMBER_20: 20,
+    NUMBER_21: 21,
+    NUMBER_22: 22,
+    NUMBER_23: 23,
+    NUMBER_24: 24,
+    NUMBER_25: 25,
+    NUMBER_26: 26
+} as const;
+
+export type VesselBenchmarkId = typeof VesselBenchmarkId[keyof typeof VesselBenchmarkId];
+
+
+/**
+ * 
+ * @export
  * @interface VesselEvent
  */
 export interface VesselEvent {
@@ -2697,7 +2737,7 @@ export const V1benchmarkApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async benchmark(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<number>>> {
+        async benchmark(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Benchmark>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.benchmark(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -2716,7 +2756,7 @@ export const V1benchmarkApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        benchmark(options?: AxiosRequestConfig): AxiosPromise<Array<number>> {
+        benchmark(options?: AxiosRequestConfig): AxiosPromise<Array<Benchmark>> {
             return localVarFp.benchmark(options).then((request) => request(axios, basePath));
         },
     };

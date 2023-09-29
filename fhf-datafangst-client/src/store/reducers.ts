@@ -24,7 +24,6 @@ import { fishingFacilityBuilder } from "./fishingFacility";
 import { getUser, userBuilder } from "./user";
 import { landingBuilder } from "./landing";
 import { efficiencyBuilder } from "./efficiency";
-import { followingBuilder } from "./follower";
 
 export const emptyState = {
   ais: undefined,

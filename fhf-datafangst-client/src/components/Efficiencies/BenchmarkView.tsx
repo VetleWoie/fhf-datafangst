@@ -1,8 +1,8 @@
-
+""
 
 
 import ReactEChart from "echarts-for-react";
-import { FC, useRef } from "react";
+import { FC, useEffect, useRef } from "react";
 import { EfficiencyTheme } from "./EfficiencyTheme";
 
 
@@ -17,10 +17,62 @@ import {
     Typography,
 } from "@mui/material";
 import { EfficiencyLeaderboard } from "./EfficiencyLeaderboard";
+import { EfficiencyViewState, selectBenchmarks, selectBwUserProfile, selectEfficiency, selectEfficiencyClass, selectVesselsByCallsign, setSelectedEfficiency, useAppDispatch, useAppSelector } from "store";
+import { AggregateBenchmark, AggregateBenchmarkOnVesselId, calculate_benchmark, excludeVesselId, FilterNaNs, FilterOnVesselId, GetBenchmarkOnId, GetBenchmarkOnIds, VesselBenchmarkId } from "./BenchmarkParse";
+import { Benchmark } from "generated/openapi";
+
 
 
 
 export const BenchmarkView: FC = () => {
+    const benchmarks = useAppSelector(selectBenchmarks);
+    const profile = useAppSelector(selectBwUserProfile);
+    const selectedEfficiency = useAppSelector(selectEfficiency);
+    const vessels = useAppSelector(selectVesselsByCallsign)
+    // const vessel = vessels[profile?.vesselInfo?.ircs ?? ""]
+    const vessel = vessels["LEGQ"]
+
+
+    if (!benchmarks) {
+        return <></>
+    }
+
+
+    console.log(benchmarks)
+    const day = FilterNaNs(GetBenchmarkOnId(benchmarks, VesselBenchmarkId.WeightPerHourDay))
+    const prev_day = FilterNaNs(GetBenchmarkOnId(benchmarks, VesselBenchmarkId.WeightPerHourPrevDay))
+
+
+    console.log("asdasd", AggregateBenchmarkOnVesselId(day, vessel.fiskeridir.id) - AggregateBenchmarkOnVesselId(prev_day, vessel.fiskeridir.id))
+    console.log("tha others", AggregateBenchmark(excludeVesselId(day, vessel.fiskeridir.id)) - AggregateBenchmark(excludeVesselId(prev_day, vessel.fiskeridir.id)))
+    const GaugeContent = (self: boolean = false) => {
+        if (!selectedEfficiency) {
+            return <></>
+        }
+        const time_range = ['Day', 'Week', 'Month', 'Year']
+        let now: string[] = [];
+        let prev: string[] = [];
+        Object.keys(VesselBenchmarkId)
+            .filter((id: string) => id.toLowerCase()
+                .includes(selectedEfficiency.toLowerCase())
+                && id.toLowerCase() !== selectedEfficiency.toLowerCase())
+            .forEach((id: string) => id.includes("Prev") ? prev.push(id) : now.push(id))
+
+        console.log(now, prev)
+
+
+
+        return now.map((id, index) => {
+            let gauge_data = calculate_benchmark(benchmarks, id as VesselBenchmarkId, prev[index] as VesselBenchmarkId, vessel.fiskeridir.id, self)
+
+            return (
+                <ReactEChart key={id} option={generateGaugeOptions(gauge_data, time_range[index], "50%")} theme={EfficiencyTheme} />
+            )
+        })
+    }
+
+    // GaugeContent()
+
 
     return (
         <Box sx={{
@@ -46,10 +98,7 @@ export const BenchmarkView: FC = () => {
                     color: 'white',
                     backgroundColor: 'primary.main',
                 }}>
-                <ReactEChart option={generateGaugeOptions(53, "Dag",  "50%")} theme={EfficiencyTheme} />
-                <ReactEChart option={generateGaugeOptions(49, "Uke", "50%")} theme={EfficiencyTheme} />
-                <ReactEChart option={generateGaugeOptions(49, "Måned", "50%")} theme={EfficiencyTheme} />
-                <ReactEChart option={generateGaugeOptions(48, "År", "50%")} theme={EfficiencyTheme} />
+                {GaugeContent(true)}
 
             </Box>
             {/* <Divider sx={{ bgcolor: "text.secondary", mb: 2, mx: 4 }} /> */}
@@ -76,11 +125,8 @@ export const BenchmarkView: FC = () => {
                         color: 'white',
                         backgroundColor: 'primary.main',
                     }}>
+                    {GaugeContent()}
 
-                    <ReactEChart option={generateGaugeOptions(52, "Dag", "50%")} theme={EfficiencyTheme} />
-                    <ReactEChart option={generateGaugeOptions(44, "Uke", "50%")} theme={EfficiencyTheme} />
-                    <ReactEChart option={generateGaugeOptions(44, "Måned", "50%")} theme={EfficiencyTheme} />
-                    <ReactEChart option={generateGaugeOptions(45, "År", "50%")} theme={EfficiencyTheme} />
                 </Box>
             </Box>
             <Divider textAlign="left"
@@ -91,18 +137,18 @@ export const BenchmarkView: FC = () => {
                 }}>Poengtavle</Typography>
             </Divider>
             <Box
-                    sx={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(4, 1fr)',
-                        color: 'white',
-                        backgroundColor: 'primary.main',
-                    }}>
+                sx={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(4, 1fr)',
+                    color: 'white',
+                    backgroundColor: 'primary.main',
+                }}>
 
 
-            <EfficiencyLeaderboard title={"Dag"}/>
-            <EfficiencyLeaderboard title={"Uke"}/>
-            <EfficiencyLeaderboard title={"Måned"}/>
-            <EfficiencyLeaderboard title={"År"}/>
+                <EfficiencyLeaderboard title={"Dag"} />
+                <EfficiencyLeaderboard title={"Uke"} />
+                <EfficiencyLeaderboard title={"Måned"} />
+                <EfficiencyLeaderboard title={"År"} />
             </Box>
         </Box>
     )
@@ -147,7 +193,6 @@ const generateGaugeOptions = (data: number, title: string, detail: string) => {
                 },
                 axisLine: {
                     roundCap: true,
-                    // color : data > 0 ? "green" : "red",
                     lineStyle: {
                         width: 4,
                     }
@@ -164,11 +209,10 @@ const generateGaugeOptions = (data: number, title: string, detail: string) => {
                     color: "white"
                 },
                 detail: {
-                    width: data.toString() + "%",
                     height: 4,
                     fontSize: 10,
-                            offsetCenter: [0, '15%'],
-        valueAnimation: true,
+                    offsetCenter: [0, '100%'],
+                    valueAnimation: true,
                     backgroundColor: 'inherit',
                     borderRadius: 3,
                     formatter: (value: number) => {

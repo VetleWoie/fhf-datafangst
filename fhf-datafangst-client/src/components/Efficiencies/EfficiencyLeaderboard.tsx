@@ -32,7 +32,7 @@ export const EfficiencyLeaderboard: FC<any> = (props : any) => {
   const profile = useAppSelector(selectBwUserProfile);
   const vesselInfo = profile?.vesselInfo;
   const vessels = useAppSelector(selectVesselsByCallsign)
-  console.log(vessels)
+  // console.log(vessels)
   const vessel = vesselInfo?.ircs ? vessels[vesselInfo.ircs] : undefined;
   const callsign = vesselInfo?.ircs ?? "";
 
