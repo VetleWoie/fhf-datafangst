@@ -11,7 +11,7 @@ import "utils/prototypes.ts";
 
 const container = document.getElementById("root");
 const root = createRoot(container!);
-
+window.store = store;
 root.render(
   <StyledEngineProvider injectFirst>
     <ThemeProvider theme={theme}>

@@ -61,3 +61,6 @@ The container mounts this folder to its filesystem so that you can edit files lo
           - ```fishPerDay```
         - ```undefined```
     - Chosen by the togglebuttons in [MyEfficiency.tsx](./fhf-datafangst-client/src/components/MyPage/MyEfficiency.tsx)
+
+> Tip: You can view the state in dev tools by adding the line ```window.store = store``` in ```src/index.tsx```. 
+>> Shouldnt matter much where you put it.
