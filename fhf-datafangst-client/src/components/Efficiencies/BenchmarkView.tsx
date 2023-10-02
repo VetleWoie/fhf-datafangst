@@ -18,8 +18,9 @@ import {
 } from "@mui/material";
 import { EfficiencyLeaderboard } from "./EfficiencyLeaderboard";
 import { EfficiencyViewState, selectBenchmarks, selectBwUserProfile, selectEfficiency, selectEfficiencyClass, selectVesselsByCallsign, setSelectedEfficiency, useAppDispatch, useAppSelector } from "store";
-import { AggregateBenchmark, AggregateBenchmarkOnVesselId, calculate_benchmark, excludeVesselId, FilterNaNs, FilterOnVesselId, GetBenchmarkOnId, GetBenchmarkOnIds, VesselBenchmarkId } from "./BenchmarkParse";
+import { AggregateBenchmark, AggregateBenchmarkOnVesselId, calculate_benchmark, excludeVesselId, FilterNaNs, FilterOnVesselId, GetBenchmarkOnId, GetBenchmarkOnIds, sortBenchmarksOnOutput, VesselBenchmarkId } from "./BenchmarkParse";
 import { Benchmark } from "generated/openapi";
+import { LeaderboardSharp } from "@mui/icons-material";
 
 
 
@@ -39,17 +40,14 @@ export const BenchmarkView: FC = () => {
 
 
     console.log(benchmarks)
-    const day = FilterNaNs(GetBenchmarkOnId(benchmarks, VesselBenchmarkId.WeightPerHourDay))
-    const prev_day = FilterNaNs(GetBenchmarkOnId(benchmarks, VesselBenchmarkId.WeightPerHourPrevDay))
 
 
-    console.log("asdasd", AggregateBenchmarkOnVesselId(day, vessel.fiskeridir.id) - AggregateBenchmarkOnVesselId(prev_day, vessel.fiskeridir.id))
-    console.log("tha others", AggregateBenchmark(excludeVesselId(day, vessel.fiskeridir.id)) - AggregateBenchmark(excludeVesselId(prev_day, vessel.fiskeridir.id)))
+    const time_range = ['Day', 'Week', 'Month', 'Year']
+
     const GaugeContent = (self: boolean = false) => {
         if (!selectedEfficiency) {
             return <></>
         }
-        const time_range = ['Day', 'Week', 'Month', 'Year']
         let now: string[] = [];
         let prev: string[] = [];
         Object.keys(VesselBenchmarkId)
@@ -57,8 +55,6 @@ export const BenchmarkView: FC = () => {
                 .includes(selectedEfficiency.toLowerCase())
                 && id.toLowerCase() !== selectedEfficiency.toLowerCase())
             .forEach((id: string) => id.includes("Prev") ? prev.push(id) : now.push(id))
-
-        console.log(now, prev)
 
 
 
@@ -69,6 +65,34 @@ export const BenchmarkView: FC = () => {
                 <ReactEChart key={id} option={generateGaugeOptions(gauge_data, time_range[index], "50%")} theme={EfficiencyTheme} />
             )
         })
+    }
+    const Leaderboards = () => {
+        if (!selectedEfficiency){
+            return <></>
+        }
+        
+        let now: string[] = [];
+        let prev: string[] = [];
+        Object.keys(VesselBenchmarkId)
+            .filter((id: string) => id.toLowerCase()
+                .includes(selectedEfficiency.toLowerCase())
+                && id.toLowerCase() !== selectedEfficiency.toLowerCase())
+            .forEach((id: string) => id.includes("Prev") ? prev.push(id) : now.push(id))
+
+        console.log("asdasd",now)
+
+        return now.map((id, index) => {
+            let bm  = GetBenchmarkOnId(benchmarks, id as VesselBenchmarkId)
+            bm = sortBenchmarksOnOutput(bm)
+
+            let vessel_index = bm?.findIndex((value : Benchmark,    _index : number ) => value.vesselId === vessel.fiskeridir.id)
+            console.log(vessel_index)
+            
+
+            return <Leaderboard key={id} title={time_range[index]} benchmarks={bm?.slice(vessel_index-5,vessel_index+5)}/> 
+        })
+        
+
     }
 
     // GaugeContent()
@@ -145,15 +169,88 @@ export const BenchmarkView: FC = () => {
                 }}>
 
 
-                <EfficiencyLeaderboard title={"Dag"} />
-                <EfficiencyLeaderboard title={"Uke"} />
-                <EfficiencyLeaderboard title={"Måned"} />
-                <EfficiencyLeaderboard title={"År"} />
+                {Leaderboards()} 
+
             </Box>
         </Box>
     )
 }
 
+const seriesLabel = {
+  show: true
+} as const;
+
+const Leaderboard : FC<{title: string, benchmarks: Benchmark[]}> = ({title,benchmarks}) => {
+    
+
+
+    const vessels = useAppSelector(selectVesselsByCallsign);
+
+
+    if (vessels == undefined ){
+        return <></>
+    }
+
+    const names = benchmarks.map((value : Benchmark, index : number) => {
+        let key = Object.values(vessels).find((vessel : any) => vessel.fiskeridir.id === value.vesselId)?.fiskeridir?.name
+        return key
+    })
+
+    const series = {
+        name : title,
+        type : "bar",
+        label : seriesLabel,
+        data : benchmarks.map((value : Benchmark, index : number) => value.output?.toFixed(1))
+    }
+    // const series = benchmarks.map((value : Benchmark, index : number) => {
+
+    // })
+
+    
+
+    return <>
+    <Box>
+        <ReactEChart option={generateLeaderboardOption(series,title,names)} theme={EfficiencyTheme} />
+    </Box>
+    </>
+}
+const generateLeaderboardOption = (series: any, title: string,vessels : any) => {
+
+    return {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow'
+            }
+          },
+          notMerge: true,
+          legend: {
+            data: title,
+            selectedMode: false
+          },
+          grid: {
+            left: 100
+          },
+          xAxis: {
+            type: 'value',
+            axisLabel: {
+              formatter: '{value}'
+            }
+          },
+          yAxis: {
+            type: 'category',
+            inverse: true,
+            // data: [...efficiencyClass["day"].map(([key, vessel]) => vessel.fiskeridir?.name ?? key)],
+            data : vessels,
+            axisLabel: {
+              formatter: '{value}',
+              margin: 20,
+            }
+          },
+        series: series
+    };
+
+}
 
 
 const generateGaugeOptions = (data: number, title: string, detail: string) => {
