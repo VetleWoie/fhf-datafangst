@@ -2,7 +2,7 @@
 
 
 import ReactEChart from "echarts-for-react";
-import { FC, useEffect, useRef } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { EfficiencyTheme } from "./EfficiencyTheme";
 
 
@@ -11,17 +11,22 @@ import {
     Button,
     Divider,
     Drawer,
+    Icon,
     IconButton,
+    Popover,
+    Popper,
     styled,
     SvgIcon,
     Typography,
 } from "@mui/material";
 import { EfficiencyLeaderboard } from "./EfficiencyLeaderboard";
 import { EfficiencyViewState, selectBenchmarks, selectBwUserProfile, selectEfficiency, selectEfficiencyClass, selectVesselsByCallsign, setSelectedEfficiency, useAppDispatch, useAppSelector } from "store";
-import { AggregateBenchmark, AggregateBenchmarkOnVesselId, calculate_benchmark, excludeVesselId, FilterNaNs, FilterOnVesselId, GetBenchmarkOnId, GetBenchmarkOnIds, sortBenchmarksOnOutput, VesselBenchmarkId } from "./BenchmarkParse";
+import { aggregateBenchmark, aggregateBenchmarkOnVesselId, calculate_benchmark, excludeVesselId, filterNaNs, filterOnVesselId, filterVesselBenchmarkEnum, getBenchmarkOnId, GetBenchmarkOnIds, sortBenchmarksOnOutput, VesselBenchmarkId } from "./BenchmarkParse";
 import { Benchmark } from "generated/openapi";
-import { LeaderboardSharp } from "@mui/icons-material";
+import { InfoOutlined, LeaderboardSharp } from "@mui/icons-material";
 
+import { usePopupState, bindTrigger, bindPopover } from 'material-ui-popup-state/hooks';
+import { generateGaugeOptions, generateLeaderboardOption } from "./BenchmarkOptions";
 
 
 
@@ -31,18 +36,17 @@ export const BenchmarkView: FC = () => {
     const selectedEfficiency = useAppSelector(selectEfficiency);
     const vessels = useAppSelector(selectVesselsByCallsign)
     // const vessel = vessels[profile?.vesselInfo?.ircs ?? ""]
-    const vessel = vessels["LEGQ"]
+    const vessel = vessels["LH2789"]
 
 
     if (!benchmarks) {
         return <></>
     }
 
-
     console.log(benchmarks)
 
 
-    const time_range = ['Day', 'Week', 'Month', 'Year']
+    const time_range = ['Dag', 'Uke', 'Måned', 'År']
 
     const GaugeContent = (self: boolean = false) => {
         if (!selectedEfficiency) {
@@ -50,48 +54,38 @@ export const BenchmarkView: FC = () => {
         }
         let now: string[] = [];
         let prev: string[] = [];
-        Object.keys(VesselBenchmarkId)
-            .filter((id: string) => id.toLowerCase()
-                .includes(selectedEfficiency.toLowerCase())
-                && id.toLowerCase() !== selectedEfficiency.toLowerCase())
-            .forEach((id: string) => id.includes("Prev") ? prev.push(id) : now.push(id))
+        filterVesselBenchmarkEnum(selectedEfficiency).forEach((id: string) => id.includes("Prev") ? prev.push(id) : now.push(id))
 
 
 
         return now.map((id, index) => {
             let gauge_data = calculate_benchmark(benchmarks, id as VesselBenchmarkId, prev[index] as VesselBenchmarkId, vessel.fiskeridir.id, self)
-
             return (
                 <ReactEChart key={id} option={generateGaugeOptions(gauge_data, time_range[index], "50%")} theme={EfficiencyTheme} />
             )
         })
     }
     const Leaderboards = () => {
-        if (!selectedEfficiency){
+        if (!selectedEfficiency) {
             return <></>
         }
-        
+
         let now: string[] = [];
         let prev: string[] = [];
-        Object.keys(VesselBenchmarkId)
-            .filter((id: string) => id.toLowerCase()
-                .includes(selectedEfficiency.toLowerCase())
-                && id.toLowerCase() !== selectedEfficiency.toLowerCase())
-            .forEach((id: string) => id.includes("Prev") ? prev.push(id) : now.push(id))
+        filterVesselBenchmarkEnum(selectedEfficiency).forEach((id: string) => id.includes("Prev") ? prev.push(id) : now.push(id))
 
-        console.log("asdasd",now)
-
+        console.log(now,prev)
         return now.map((id, index) => {
-            let bm  = GetBenchmarkOnId(benchmarks, id as VesselBenchmarkId)
+            let bm = filterNaNs(getBenchmarkOnId(benchmarks, id as VesselBenchmarkId))
             bm = sortBenchmarksOnOutput(bm)
 
-            let vessel_index = bm?.findIndex((value : Benchmark,    _index : number ) => value.vesselId === vessel.fiskeridir.id)
+            let vessel_index = bm?.findIndex((value: Benchmark, _index: number) => value.vesselId === vessel.fiskeridir.id)
             console.log(vessel_index)
-            
 
-            return <Leaderboard key={id} title={time_range[index]} benchmarks={bm?.slice(vessel_index-5,vessel_index+5)}/> 
+
+            return <Leaderboard key={id} title={time_range[index]} benchmarks={bm?.slice(vessel_index - 5, vessel_index + 5)} />
         })
-        
+
 
     }
 
@@ -115,15 +109,32 @@ export const BenchmarkView: FC = () => {
             </Divider>
             <Box
                 sx={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(4, 1fr)',
-                    py: 3,
-                    px: 2.5,
-                    color: 'white',
-                    backgroundColor: 'primary.main',
-                }}>
-                {GaugeContent(true)}
+                    flex: 1
+                }}
+            >
 
+                <InformationPanel >
+                    <Typography variant="body2" >
+
+                        Grunnlaget for denne målingen er basert på din landingsdata i ett gitt tidsrom sammenlignet med tidligere landingsdata i samme tidsrom. <br />
+                        For eksempel: <br />
+                        Hvis du har landet 1000 kg i dag og 500 kg i går, vil du få en positiv måling på Dag. <br />
+                    </Typography>
+
+                </InformationPanel>
+
+                <Box
+                    sx={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(4, 1fr)',
+                        py: 3,
+                        px: 2.5,
+                        color: 'white',
+                        backgroundColor: 'primary.main',
+                    }}>
+                    {GaugeContent(true)}
+
+                </Box>
             </Box>
             {/* <Divider sx={{ bgcolor: "text.secondary", mb: 2, mx: 4 }} /> */}
             <Box
@@ -139,18 +150,32 @@ export const BenchmarkView: FC = () => {
                         marginRight: "auto",
                     }}>Gjennomsnittets</Typography>
                 </Divider>
+                <Box sx={{ flex: 1 }}
+                >
+                    <InformationPanel >
+                        <Typography variant="body2" >
 
-                <Box
-                    sx={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(4, 1fr)',
-                        py: 3,
-                        px: 2.5,
-                        color: 'white',
-                        backgroundColor: 'primary.main',
-                    }}>
-                    {GaugeContent()}
+                            Grunnlaget for denne målingen er basert på gjennomsnittets landingsdata i ett gitt tidsrom sammenlignet med tidligere landingsdata i samme tidsrom. <br />
+                            For eksempel: <br />
+                            Hvis gjennomsnittet har landet 1000 kg i dag og 500 kg i går, vil det være en positiv måling på Dag. <br />
+                        </Typography>
 
+                    </InformationPanel>
+
+
+
+                    <Box
+                        sx={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(4, 1fr)',
+                            py: 3,
+                            px: 2.5,
+                            color: 'white',
+                            backgroundColor: 'primary.main',
+                        }}>
+                        {GaugeContent()}
+
+                    </Box>
                 </Box>
             </Box>
             <Divider textAlign="left"
@@ -160,169 +185,122 @@ export const BenchmarkView: FC = () => {
                     marginRight: "auto",
                 }}>Poengtavle</Typography>
             </Divider>
-            <Box
-                sx={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(4, 1fr)',
-                    color: 'white',
-                    backgroundColor: 'primary.main',
-                }}>
+            <Box sx={{ flex: 1 }}>
+                <InformationPanel >
+                    <Typography variant="body2" >
+                        Denne poengtavlen viser en list av fartøy som er sammenlignet nært deg på de forskjellige benchmarkene<br />
 
 
-                {Leaderboards()} 
+                    </Typography>
 
+                </InformationPanel>
+
+
+
+                <Box
+                    sx={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(4, 1fr)',
+                        color: 'white',
+                        backgroundColor: 'primary.main',
+                    }}>
+
+
+                    {Leaderboards()}
+
+                </Box>
             </Box>
         </Box>
     )
 }
 
 const seriesLabel = {
-  show: true
+    show: true
 } as const;
 
-const Leaderboard : FC<{title: string, benchmarks: Benchmark[]}> = ({title,benchmarks}) => {
-    
+const Leaderboard: FC<{ title: string, benchmarks: Benchmark[] }> = ({ title, benchmarks }) => {
+
 
 
     const vessels = useAppSelector(selectVesselsByCallsign);
 
 
-    if (vessels == undefined ){
+    if (vessels == undefined) {
         return <></>
     }
 
-    const names = benchmarks.map((value : Benchmark, index : number) => {
-        let key = Object.values(vessels).find((vessel : any) => vessel.fiskeridir.id === value.vesselId)?.fiskeridir?.name
+    const names = benchmarks.map((value: Benchmark, index: number) => {
+        let key = Object.values(vessels).find((vessel: any) => vessel.fiskeridir.id === value.vesselId)?.fiskeridir?.name ?? "Ukjent"
         return key
     })
 
     const series = {
-        name : title,
-        type : "bar",
-        label : seriesLabel,
-        data : benchmarks.map((value : Benchmark, index : number) => value.output?.toFixed(1))
+        name: title,
+        type: "bar",
+        label: seriesLabel,
+        data: benchmarks.map((value: Benchmark, index: number) => value.output?.toFixed(1))
     }
     // const series = benchmarks.map((value : Benchmark, index : number) => {
 
     // })
+    if (benchmarks.length === 0) {
+        return <>
+            <Typography variant="h3" sx={{
+                marginLeft: "auto",
+                marginRight: "auto",
+            }}>Ingen data</Typography>
+        </>
+    }
+    // if (aggregateBenchmark(benchmarks) === 0) {
+    //     return <>
+    //         <Typography variant="h3" sx={{
+    //             marginLeft: "auto",
+    //             marginRight: "auto",
+    //         }}>Ingen data</Typography>
+    //     </>
+    // }
 
-    
+
+
+
 
     return <>
-    <Box>
-        <ReactEChart option={generateLeaderboardOption(series,title,names)} theme={EfficiencyTheme} />
-    </Box>
+        <Box>
+            <ReactEChart option={generateLeaderboardOption(series, title, names)} theme={EfficiencyTheme} />
+        </Box>
     </>
 }
-const generateLeaderboardOption = (series: any, title: string,vessels : any) => {
-
-    return {
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-              type: 'shadow'
-            }
-          },
-          notMerge: true,
-          legend: {
-            data: title,
-            selectedMode: false
-          },
-          grid: {
-            left: 100
-          },
-          xAxis: {
-            type: 'value',
-            axisLabel: {
-              formatter: '{value}'
-            }
-          },
-          yAxis: {
-            type: 'category',
-            inverse: true,
-            // data: [...efficiencyClass["day"].map(([key, vessel]) => vessel.fiskeridir?.name ?? key)],
-            data : vessels,
-            axisLabel: {
-              formatter: '{value}',
-              margin: 20,
-            }
-          },
-        series: series
-    };
-
-}
 
 
-const generateGaugeOptions = (data: number, title: string, detail: string) => {
+const InformationPanel: FC<{ children: any }> = (props: any) => {
+    const { children } = props;
+    const [open, setOpen] = useState(false);
 
-    return {
-        title: {
-            text: title,
-            x: 'center',
-            textStyle: {
-                color: 'white',
-                fontSize: 20,
-            }
-        },
-        tooltip: {
-            formatter: "{a} <br/>{b} : {c}%"
-        },
-        series: [
-            {
-                min: -100,
-                max: 100,
-                type: 'gauge',
-                pointer: {
-                    icon: 'path://M2.9,0.7L2.9,0.7c1.4,0,2.6,1.2,2.6,2.6v115c0,1.4-1.2,2.6-2.6,2.6l0,0c-1.4,0-2.6-1.2-2.6-2.6V3.3C0.3,1.9,1.4,0.7,2.9,0.7z',
-                    width: 8,
-                    length: '80%',
-                    offsetCenter: [0, '8%']
-                },
-                progress: {
-                    show: true,
-                    overlap: true,
-                    roundCap: true
-                },
-                splitLine: {
-                    lineStyle: {
-                        color: "white",
-                    }
-                },
-                axisLine: {
-                    roundCap: true,
-                    lineStyle: {
-                        width: 4,
-                    }
-
-                },
-                axisTick: {
-                    splitNumber: 2,
-                    lineStyle: {
-                        width: 2,
-                        color: "white",
-                    }
-                },
-                axisLabel: {
-                    color: "white"
-                },
-                detail: {
-                    height: 4,
-                    fontSize: 10,
-                    offsetCenter: [0, '100%'],
-                    valueAnimation: true,
-                    backgroundColor: 'inherit',
-                    borderRadius: 3,
-                    formatter: (value: number) => {
-                        return value.toFixed(0) + "%"
-                    }
-                },
-                data: [{ value: data }]
-            }
-        ]
+    const handleClick = () => {
+        setOpen(!open);
     };
 
 
+    return (
+        <Box sx={{ position: "absolute", zIndex: 3 }}>
+            <IconButton onClick={handleClick}>
+                <InfoOutlined />
+            </IconButton>
+            {open && <Box
+                sx={{
+                    bgcolor: "primary.main",
+                    border: "1px solid white",
+                    margin: "1rem",
+                    padding: "2rem",
+                }}
+            >
 
+                <Typography variant="h4" sx={{}}>
+                    Beskrivelse av data
+                </Typography>
+                {children}
+            </Box>}
 
+        </Box>)
 
 }

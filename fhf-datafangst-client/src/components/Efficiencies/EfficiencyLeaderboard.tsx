@@ -4,9 +4,11 @@ import { FC } from "react";
 import { EfficiencyTheme } from "./EfficiencyTheme";
 import { Box, Typography } from "@mui/material";
 import { selectBwUserProfile, selectVesselsByCallsign, useAppDispatch, useAppSelector } from "store";
-import { EfficiencyViewState, selectEfficiency, selectEfficiencyClass, selectEfficiencyDuration,  } from "store/efficiency";
-import { Vessel } from "generated/openapi";
+import { EfficiencyViewState, selectBenchmarks, selectEfficiency, selectEfficiencyClass, selectEfficiencyDuration,  } from "store/efficiency";
+import { Benchmark, Vessel } from "generated/openapi";
 import { set } from "date-fns";
+import { generateLeaderboardOption } from "./BenchmarkOptions";
+import { VesselBenchmarkId, find_vessel_index, getBenchmarkOnId, sortBenchmarksOnOutput } from "./BenchmarkParse";
 
 
 const seriesLabel = {
@@ -25,6 +27,9 @@ export const EfficiencyLeaderboard: FC<any> = (props : any) => {
   const dispatch = useAppDispatch();
 
   const selectedEfficiency = useAppSelector(selectEfficiency);
+  if (!selectedEfficiency) {
+    return <></>;
+  }
   const selectedEfficiencyDuration = useAppSelector(selectEfficiencyDuration);
 
   const efficiencyClass = useAppSelector(selectEfficiencyClass);
@@ -35,92 +40,39 @@ export const EfficiencyLeaderboard: FC<any> = (props : any) => {
   console.log(vessels)
   const vessel = vesselInfo?.ircs ? vessels[vesselInfo.ircs] : undefined;
   const callsign = vesselInfo?.ircs ?? "";
-
-
   if (!vessel) {
     return <></>;
   }
 
+  const benchmarks = useAppSelector(selectBenchmarks);
 
-  const findClosestVessels = (vessels?: [string, Vessel][], vessel_name?: string, num_closest: number = 2) => {
-    console.log(vessels, vessel_name)
-    if (!vessel_name) {
-      return []
-    }
-    const index = vessels?.findIndex(([key, value]) => key === vessel_name);
-    console.log(index)
-    if (!index) {
-      return vessels
-    }
+  if (!benchmarks) {
+    return <></>;
+  }
+  let bm = getBenchmarkOnId(benchmarks, VesselBenchmarkId[selectedEfficiency] )
+  bm = sortBenchmarksOnOutput(bm)
 
-    return vessels?.slice(index - num_closest, index + num_closest)
+  let vessel_index = find_vessel_index(bm, vessel.fiskeridir.id)
+  if (vessel_index === -1) {
+    vessel_index = 5
   }
 
-  // let medioVessels = efficiencyClass
 
+ 
+    const names = bm .map((value: Benchmark, index: number) => {
+        let key = Object.values(vessels).find((vessel: any) => vessel.fiskeridir.id === value.vesselId)?.fiskeridir?.name ?? "Ukjent"
+        return key
+    }) // let medioVessels = efficiencyClass    
 
-  var leaderBoardData: LeaderboardData[] = [];
+    bm = bm?.slice(vessel_index! - 5, vessel_index! + 5)
 
-  selectedEfficiencyDuration?.forEach((duration) => {
-    var efficiencyData: string[] = [];
-    switch (selectedEfficiency) {
-      case EfficiencyViewState.fishPerHour: {
-        efficiencyData = [...efficiencyClass[duration].map(([key, vessel]) => vessel.fishCaughtPerHour?.toFixed(1))]
-        break;
-      }
-      case EfficiencyViewState.distancePerHour: {
-        efficiencyData = [];
-        break;
-      }
-      default: {
-        efficiencyData = [];
-        break;
-      }
+    const series = {
+        name: props.title,
+        type: "bar",
+        label: seriesLabel,
+        data: bm.map((value: Benchmark, index: number) => value.output?.toFixed(1))
     }
 
-    leaderBoardData.push(
-      {
-        name: duration,
-        type: 'bar',
-        label: seriesLabel,
-        data: efficiencyData,
-      }
-    );
-  });
-
-
-  const eChartsOption = {
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        type: 'shadow'
-      }
-    },
-    notMerge: true,
-    legend: {
-      data: props.title ?? 'Day',
-      selectedMode: false
-    },
-    grid: {
-      left: 100
-    },
-    xAxis: {
-      type: 'value',
-      axisLabel: {
-        formatter: '{value}'
-      }
-    },
-    yAxis: {
-      type: 'category',
-      inverse: true,
-      data: [...efficiencyClass["day"].map(([key, vessel]) => vessel.fiskeridir?.name ?? key)],
-      axisLabel: {
-        formatter: '{value}',
-        margin: 20,
-      }
-    },
-    series: leaderBoardData,
-  };
 
   return (
     <Box
@@ -135,68 +87,11 @@ export const EfficiencyLeaderboard: FC<any> = (props : any) => {
       </Box> */}
       <Box>
         <ReactEChart
-          option={eChartsOption}
+          option={generateLeaderboardOption(series, selectedEfficiency, names)}
           notMerge={true}
           theme={EfficiencyTheme}
         />
       </Box>
     </Box>
   );
-}
-
-
-
-
-
-
-function createSeries(name: string, data?: string[]) {
-  return {
-    name: name,
-    type: 'bar',
-    data: data,
-    label: seriesLabel,
-    markPoint: {
-      symbolSize: 1,
-      symbolOffset: [0, '50%'],
-      label: {
-        formatter: '{a|{a}\n}{b|{b} }{c|{c}}',
-        // backgroundColor: 'rgb(242,242,242)',
-        borderColor: '#aaa',
-        borderWidth: 1,
-        borderRadius: 4,
-        padding: [4, 10],
-        lineHeight: 40,
-        position: 'right',
-        distance: 20,
-        rich: {
-          value: {
-            align: 'center',
-            fontSize: 18,
-            textShadowBlur: 2,
-            textShadowOffsetX: 0,
-            textShadowOffsetY: 1,
-            textBorderWidth: 2,
-            color: "red"
-          },
-          // [name as string]: {
-          //   color: 'red'
-          // },
-          c: {
-            // color: '#ff8811',
-            // textBorderColor: '#000',
-            textBorderWidth: 1,
-            fontSize: 22
-          }
-        },
-        data: [
-          { type: 'max', name: 'max days: ' },
-          { type: 'min', name: 'min days: ' }
-        ]
-      }
-    },
-
-
-  }
-
-
 }

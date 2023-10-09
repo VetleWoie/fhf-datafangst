@@ -5,18 +5,20 @@ import { Box, Divider, IconButton, Typography } from "@mui/material"
 import { VesselFilter } from "components/Filters/VesselFilter"
 import { Vessel } from "generated/openapi"
 import { FC } from "react"
-import { selectVesselsByCallsign, useAppDispatch, useAppSelector, selectUser, selectUserVessels, setSelectedVessels, updateUser } from "store"
+import { selectVesselsByCallsign, useAppDispatch, useAppSelector, selectUser, selectUserVessels, setSelectedVessels, updateUser, selectBwUserProfile } from "store"
 import { VesselInfo } from "./VesselInfo"
 
 export const VesselFinder: FC = () => {
     const dispatch = useAppDispatch()
     const vessels = useAppSelector(selectVesselsByCallsign)
+    const profile = useAppSelector(selectBwUserProfile);
     const followers = useAppSelector(selectUser);
     const selected_vessels = useAppSelector(selectUserVessels);
 
 
     const content = () => selected_vessels.map((vessel) => {
         const isFollowing = followers?.following?.find((f) => f === vessel?.fiskeridir.id)
+        const following_vessels = followers?.following?.map((f) => vessels[f])
 
 
         return (
@@ -30,7 +32,11 @@ export const VesselFinder: FC = () => {
                 }}
                 
                     // needs to get /user to cotinue
-                    onClick={() => {}} >
+                    onClick={() => {
+                        if (!isFollowing) {
+                            dispatch(updateUser({ following: [vessel] , }))
+                        }
+                    }} >
                     {!isFollowing ? <PersonAdd /> : <PersonRemove />}
                 </IconButton>
              </Box>

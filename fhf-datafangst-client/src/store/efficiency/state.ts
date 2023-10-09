@@ -1,9 +1,9 @@
 import { Benchmark, Vessel } from "generated/openapi";
 
 export enum EfficiencyViewState {
-  weightPerDistance= "weightPerDistance",
+  weightPerDistance= "WeightPerDistance",
   weightPerHour= "WeightPerHour",
-  totalWeight= "totalWeight",
+  totalWeight= "TotalWeight",
 }
 
 export enum EfficiencyDurationState {
@@ -26,6 +26,6 @@ export const initalEfficiencyState: EfficiencyState = {
   selectedEfficiency : undefined,
   selectedEfficienciyDuration : undefined,
   efficiencyClass : undefined,
-  selectedEfficiencyDetailOpen : false,
+  selectedEfficiencyDetailOpen : true,
   benchmarks:  undefined,
 };
