@@ -146,12 +146,12 @@ export const BenchmarkView: FC = () => {
       <HeaderButtonCell>
           <BmHeaderMenuButtons />
       </HeaderButtonCell>
-      <MenuArea>
+      {/* <MenuArea>
         whasts giubg ib
-      </MenuArea>
+      </MenuArea> */}
     </GridContainer>
     <Box sx={{ height: "100vh", width: "100%", backgroundColor: "primary.main" }}>
-      asdasd
+      <EfficiencyGauge
 
     </Box>
     </>

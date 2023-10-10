@@ -47,3 +47,4 @@ export { SearchFilters } from "./MainMenu/SearchFilters/SearchFilters";
 export { TripDetails } from "./TripDetails/TripDetails";
 export { Header as BmHeader } from "./Benchmark/Header";
 export { HeaderMenuButtons as BmHeaderMenuButtons } from "./Benchmark/HeaderMenuButtons";
+export { SpeciesHistogram } from "./Graphs/SpeciesHistogram";
