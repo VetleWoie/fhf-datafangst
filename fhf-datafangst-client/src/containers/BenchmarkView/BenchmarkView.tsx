@@ -7,6 +7,7 @@ import {
   FollowList,
   DatePeriodPicker,
   HistoricalCatches,
+  DatePeriodPicker
 } from "components";
 import { FC, useEffect, useState } from "react";
 import { useAuth } from "oidc-react";
@@ -224,6 +225,7 @@ export const BenchmarkView: FC = () => {
               </Typography>
             </Box>
           )}
+        <DatePeriodPicker value={value} onChange={onChange}></DatePeriodPicker>
         </GridMainArea>
       </GridContainer>
     </>
