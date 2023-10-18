@@ -6,7 +6,7 @@ import {
   LocalLoadingProgress,
   FollowList,
 } from "components";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { useAuth } from "oidc-react";
 import {
   MenuViewState,
@@ -29,6 +29,24 @@ import { GridContainer, HeaderButtonCell, HeaderTrack } from "containers";
 import { ArrowBackIos } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import theme from "app/theme";
+
+
+import { DateRange } from "components/MainMenu/SearchFilters/DateFilter"
+import { DateFilter } from "components/MainMenu/SearchFilters/DateFilter"
+
+
+const DataPickerFunc = (props: any) => {
+  // Define your value and onChange functions here
+  const [value, setValue] = useState<DateRange>(/* initial value here */);
+
+  const onChange = (newDateRange: DateRange | undefined) => {
+    // Handle the new date range here
+    setValue(newDateRange);
+  };
+
+  return <DateFilter value={value} onChange={onChange} />;
+};
+
 
 const GridMainArea = (props: any) => (
   <Box
@@ -60,6 +78,8 @@ const FollowerArea = (props: any) => (
     {props.children}
   </Box>
 );
+
+
 
 export const BenchmarkView: FC = () => {
   const { signIn, isLoading, userData } = useAuth();

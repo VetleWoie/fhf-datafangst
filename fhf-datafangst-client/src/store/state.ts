@@ -45,7 +45,7 @@ const initialBaseState: BaseState = {
   error: false,
   isLoggedIn: false,
   bwProfile: undefined,
-  viewState: MenuViewState.Overview,
+  viewState: MenuViewState.MyPage,
   authUser: undefined,
   matrixToggle: MatrixToggle.Haul,
   tripFiltersOpen: false,
