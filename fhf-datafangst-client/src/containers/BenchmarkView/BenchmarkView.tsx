@@ -5,6 +5,7 @@ import {
   SpeciesHistogram,
   LocalLoadingProgress,
   FollowList,
+  DatePeriodPicker
 } from "components";
 import { FC, useEffect, useState } from "react";
 import { useAuth } from "oidc-react";
@@ -29,8 +30,6 @@ import { GridContainer, HeaderButtonCell, HeaderTrack } from "containers";
 import { ArrowBackIos } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import theme from "app/theme";
-
-
 import { DateRange } from "components/MainMenu/SearchFilters/DateFilter"
 import { DateFilter } from "components/MainMenu/SearchFilters/DateFilter"
 
@@ -80,7 +79,6 @@ const FollowerArea = (props: any) => (
 );
 
 
-
 export const BenchmarkView: FC = () => {
   const { signIn, isLoading, userData } = useAuth();
   const loggedIn = useAppSelector(selectIsLoggedIn);
@@ -90,6 +88,12 @@ export const BenchmarkView: FC = () => {
   const fiskeridirVessels = useAppSelector(selectVesselsByFiskeridirId);
   const vessel = vesselInfo?.ircs ? vessels[vesselInfo.ircs] : undefined;
   const trips = useAppSelector(selectTrips);
+  const [value, setValue] = useState<DateRange>(/* initial value here */);
+
+  const onChange = (newDateRange: DateRange | undefined) => {
+    // Handle the new date range here
+    setValue(newDateRange);
+  }
   const user = useAppSelector(selectUser);
   const benchmarkHistoric = useAppSelector(selectBenchmarkNumHistoric);
   const dispatch = useAppDispatch();
@@ -203,6 +207,7 @@ export const BenchmarkView: FC = () => {
               </Typography>
             </Box>
           )}
+        <DatePeriodPicker value={value} onChange={onChange}></DatePeriodPicker>
         </GridMainArea>
       </GridContainer>
     </>
