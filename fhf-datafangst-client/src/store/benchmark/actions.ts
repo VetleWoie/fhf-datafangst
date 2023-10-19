@@ -1,6 +1,7 @@
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 import * as Api from "api";
 import { BenchmarkDataSource, BenchmarkModalParams } from "./state";
+import { DateRange } from "components/MainMenu/SearchFilters/DateFilter";
 import { Vessel } from "generated/openapi";
 
 export interface BenchmarkHistoricParams {
@@ -26,4 +27,8 @@ export const setBenchmarkDataSource = createAction<BenchmarkDataSource>(
 
 export const clearBenchmarkData = createAction<Vessel>(
   "benchmark/clearBenchmarkData",
+);
+
+export const setBenchmarkPeriod = createAction<DateRange>(
+  "benchmark/setBenchmarPeriod",
 );

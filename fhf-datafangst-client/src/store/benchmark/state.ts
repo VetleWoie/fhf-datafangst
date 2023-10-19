@@ -5,6 +5,8 @@ export interface HistoricParams {
   dataset: (string | number)[][];
   metric?: string;
 }
+import { DateRange } from "components/MainMenu/SearchFilters/DateFilter";
+
 export interface BenchmarkModalParams {
   title?: string;
   description?: string;
@@ -22,12 +24,14 @@ export interface BenchmarkState {
   benchmarkHistoric?: Record<string, number[]>;
   benchmarkNumHistoric: number;
   benchmarkDataSource: BenchmarkDataSource;
+  benchmarkPeriod?: DateRange;
 }
 
 export const initialBenchmarkState: BenchmarkState = {
   benchmarkModal: undefined,
   benchmarkHistoric: undefined,
   benchmarkTrips: {},
+  benchmarkPeriod: undefined,
   benchmarkNumHistoric: 10,
   benchmarkDataSource: BenchmarkDataSource.Landings,
 };

@@ -17,13 +17,13 @@ import {
   selectBwUserProfile,
   selectIsLoggedIn,
   selectTrips,
-  selectTripsLoading,
   selectUser,
   selectVesselsByCallsign,
   selectVesselsByFiskeridirId,
   setViewState,
   useAppDispatch,
   useAppSelector,
+  selectTripsLoading,
 } from "store";
 import { Ordering, TripSorting } from "generated/openapi";
 import { GridContainer, HeaderButtonCell, HeaderTrack } from "containers";
@@ -31,6 +31,7 @@ import { ArrowBackIos } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import theme from "app/theme";
 import { DateRange } from "components/MainMenu/SearchFilters/DateFilter"
+import { selectBenchmarkPeriod } from "store/benchmark";
 import { DateFilter } from "components/MainMenu/SearchFilters/DateFilter"
 
 
@@ -88,19 +89,14 @@ export const BenchmarkView: FC = () => {
   const fiskeridirVessels = useAppSelector(selectVesselsByFiskeridirId);
   const vessel = vesselInfo?.ircs ? vessels[vesselInfo.ircs] : undefined;
   const trips = useAppSelector(selectTrips);
-  const [value, setValue] = useState<DateRange>(/* initial value here */);
-
-  const onChange = (newDateRange: DateRange | undefined) => {
-    // Handle the new date range here
-    setValue(newDateRange);
-  }
+  const tripsLoading = useAppSelector(selectTripsLoading);
   const user = useAppSelector(selectUser);
   const benchmarkHistoric = useAppSelector(selectBenchmarkNumHistoric);
   const dispatch = useAppDispatch();
-  const tripsLoading = useAppSelector(selectTripsLoading);
   const navigate = useNavigate();
-
   const followVessels = user?.following.map((id) => fiskeridirVessels[id]);
+
+  let BenchmarkPeriod = useAppSelector(selectBenchmarkPeriod);
 
   useEffect(() => {
     dispatch(setViewState(MenuViewState.Benchmark));
@@ -135,6 +131,22 @@ export const BenchmarkView: FC = () => {
   if (!loggedIn && !isLoading && !userData) {
     signIn();
   }
+
+  if (!vessel) {
+    navigate("/");
+    return <p>No vessel associated with this user</p>;
+  }
+
+  if (!trips) {
+    return <p>No trips assigned in timeperiod</p>;
+  };
+
+  if (BenchmarkPeriod === undefined) {
+    BenchmarkPeriod = new DateRange(new Date(trips[trips.length -1].start), new Date(trips[0].end)) // Sets start and stop date to be displayed on the calendar.
+  }
+
+  console.log("BMP ", BenchmarkPeriod)
+
 
   return (
     <>
@@ -207,7 +219,7 @@ export const BenchmarkView: FC = () => {
               </Typography>
             </Box>
           )}
-        <DatePeriodPicker value={value} onChange={onChange}></DatePeriodPicker>
+        <DatePeriodPicker period={BenchmarkPeriod}></DatePeriodPicker>
         </GridMainArea>
       </GridContainer>
     </>

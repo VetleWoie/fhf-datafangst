@@ -21,3 +21,7 @@ export const selectBenchmarkTrips = createSelector(
   selectAppState,
   (state) => state.benchmarkTrips,
 );
+export const selectBenchmarkPeriod = createSelector(
+  selectAppState,
+  (state) => state.benchmarkPeriod,
+);

@@ -6,6 +6,7 @@ import {
   setBenchmarkDataSource,
   setBenchmarkHistoric,
   setBenchmarkModal,
+  setBenchmarkPeriod,
 } from "./actions";
 import { Trip } from "generated/openapi";
 
@@ -36,4 +37,8 @@ export const benchmarkBuilder = (
           tmp[+fiskeridirId] = state.benchmarkTrips[+fiskeridirId];
         });
       state.benchmarkTrips = tmp;
+    })
+    .addCase(setBenchmarkPeriod, (state, action) => {
+      state.benchmarkPeriod = action.payload
+
     });
