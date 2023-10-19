@@ -137,16 +137,11 @@ export const BenchmarkView: FC = () => {
     return <p>No vessel associated with this user</p>;
   }
 
-  if (!trips) {
-    return <p>No trips assigned in timeperiod</p>;
-  };
-
   if (BenchmarkPeriod === undefined) {
-    BenchmarkPeriod = new DateRange(new Date(trips[trips.length -1].start), new Date(trips[0].end)) // Sets start and stop date to be displayed on the calendar.
+    BenchmarkPeriod = trips
+      ? new DateRange(new Date(trips[trips.length - 1].start), new Date(trips[0].end))
+      : new DateRange(new Date(), new Date());
   }
-
-  console.log("BMP ", BenchmarkPeriod)
-
 
   return (
     <>
@@ -219,7 +214,7 @@ export const BenchmarkView: FC = () => {
               </Typography>
             </Box>
           )}
-        <DatePeriodPicker period={BenchmarkPeriod}></DatePeriodPicker>
+        <DatePeriodPicker period={BenchmarkPeriod} existingTrips={false}></DatePeriodPicker>
         </GridMainArea>
       </GridContainer>
     </>

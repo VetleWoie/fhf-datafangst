@@ -15,6 +15,7 @@ import { setBenchmarkPeriod } from "store/benchmark";
 
 interface datePickerProps {
   period: DateRange;
+  existingTrips: boolean;
 }
 
 export const DatePeriodPicker = (props: datePickerProps) => {
@@ -25,7 +26,7 @@ export const DatePeriodPicker = (props: datePickerProps) => {
   const vessel = vesselInfo?.ircs ? vessels[vesselInfo.ircs] : undefined;
   const trips = useAppSelector(selectTrips)
 
-  if (!vessel || !trips) {
+  if (!vessel) {
     return <></>
   };
 
@@ -35,7 +36,6 @@ export const DatePeriodPicker = (props: datePickerProps) => {
 
 
   const onChange = (newDateRange: DateRange | undefined) => {
-    console.log("CONSOLE LOG ON CHANGE")
     if (!newDateRange) {
       return
     }
@@ -44,8 +44,6 @@ export const DatePeriodPicker = (props: datePickerProps) => {
       getTrips({
         vessels: [vessel],
         sorting: [TripSorting.StopDate, Ordering.Desc],
-        offset: 0,
-        limit: 50,
         dateRange: newDateRange
       }))
     setValue(newDateRange);
@@ -54,21 +52,25 @@ export const DatePeriodPicker = (props: datePickerProps) => {
 
   return (
     <Box>
-      <CalenderContainer>
-        <DateFilter value={value} onChange={onChange} />;
+      <CalenderContainer existingTrips = {props.existingTrips}>
+        <DateFilter value={value} onChange={onChange} />
       </CalenderContainer>
     </Box>
   )
 };
 
-const CalenderContainer = (props: any) => (
+interface CalenderContainerProps {
+  existingTrips: Boolean;
+  children: any;
+}
+
+const CalenderContainer = (props: CalenderContainerProps) => (
   <Box
     sx={{
-    backgroundColor: "primary.main",
-    color: "white",
-    width: "20%"
-  }}
-  >
+      backgroundColor: "primary.main",
+      color: "white",
+      width: props.existingTrips ? "20%" : "100%"
+    }}>
     {props.children}
   </Box>
 );

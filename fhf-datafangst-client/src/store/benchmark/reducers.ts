@@ -40,5 +40,5 @@ export const benchmarkBuilder = (
     })
     .addCase(setBenchmarkPeriod, (state, action) => {
       state.benchmarkPeriod = action.payload
-
+      console.log("action" , action.payload)
     });
