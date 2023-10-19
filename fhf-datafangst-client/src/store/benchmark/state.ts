@@ -6,7 +6,6 @@ export interface HistoricParams {
   dataset: (string | number)[][];
   metric?: string;
 }
-
 export interface BenchmarkModalParams {
   title?: string;
   description?: string;

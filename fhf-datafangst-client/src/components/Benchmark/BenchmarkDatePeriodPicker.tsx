@@ -73,7 +73,7 @@ const CalenderContainer = (props: CalenderContainerProps) => (
     sx={{
       backgroundColor: "primary.main",
       color: "white",
-      width: props.existingTrips ? "20%" : "30%"
+
     }}>
     {props.children}
   </Box>

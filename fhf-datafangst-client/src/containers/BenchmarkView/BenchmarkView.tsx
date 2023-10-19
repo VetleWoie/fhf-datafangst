@@ -5,9 +5,8 @@ import {
   SpeciesHistogram,
   LocalLoadingProgress,
   FollowList,
-  DatePeriodPicker,
   HistoricalCatches,
-  DatePeriodPicker
+  DatePeriodPicker,
 } from "components";
 import { FC, useEffect, useState } from "react";
 import { useAuth } from "oidc-react";
@@ -103,6 +102,8 @@ export const BenchmarkView: FC = () => {
   const navigate = useNavigate();
   const followVessels = user?.following.map((id) => fiskeridirVessels[id]);
 
+  let BenchmarkPeriod = useAppSelector(selectBenchmarkPeriod);
+
   useEffect(() => {
     dispatch(setViewState(MenuViewState.Benchmark));
     if (vessel) {
@@ -137,15 +138,6 @@ export const BenchmarkView: FC = () => {
 
   if (!vessel) {
     return <></>;
-  }
-
-  if (!loggedIn && !isLoading && !userData) {
-    signIn();
-  }
-
-  if (!vessel) {
-    navigate("/");
-    return <p>No vessel associated with this user</p>;
   }
 
   if (!loggedIn && !isLoading && !userData) {
@@ -208,16 +200,18 @@ export const BenchmarkView: FC = () => {
           {tripsLoading && <LocalLoadingProgress />}
           {trips?.length && (
             <Box>
+              <Box sx={{display: "grid", placeItems: "center" }}>
+                  <DatePeriodPicker existingTrips={false}/>
+              </Box>
               <BenchmarkCards />
               <SpeciesHistogram />
               <HistoricalCatches />
             </Box>
           )}
-            <DatePeriodPicker existingTrips={false}/>
           {!tripsLoading && !trips?.length && (
             <Box sx={{ display: "grid", placeItems: "center" }}>
               <Typography color="text.secondary" variant="h2">
-                Fant ingen turer for ditt fartøy
+                Fant ingen turer for ditt fartøy.
               </Typography>
               <Typography sx={{ pt: 3 }} color="text.secondary" variant="h5">
                 For å kunne gi deg statistikk for dine turer må du ha levert
@@ -225,7 +219,6 @@ export const BenchmarkView: FC = () => {
               </Typography>
             </Box>
           )}
-        <DatePeriodPicker value={value} onChange={onChange}></DatePeriodPicker>
         </GridMainArea>
       </GridContainer>
     </>

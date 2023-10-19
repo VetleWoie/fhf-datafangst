@@ -21,10 +21,11 @@ export const selectBenchmarkTrips = createSelector(
   selectAppState,
   (state) => state.benchmarkTrips,
 );
+export const selectBenchmarkTimeSpan = createSelector(
+  selectAppState,
+  (state) => state.benchmarkTimeSpan,
+);
 export const selectBenchmarkPeriod = createSelector(
   selectAppState,
   (state) => state.benchmarkPeriod,
-);export const selectBenchmarkTimeSpan = createSelector(
-  selectAppState,
-  (state) => state.benchmarkTimeSpan,
 );
