@@ -20,6 +20,7 @@ import {
   selectBwUserProfile,
   selectIsLoggedIn,
   selectTrips,
+  selectTripsLoading,
   selectUser,
   selectVesselsByCallsign,
   selectVesselsByFiskeridirId,
@@ -27,7 +28,6 @@ import {
   useAppDispatch,
   useAppSelector,
   selectBenchmarkPeriod,
-  selectTripsLoading,
   getLandings,
 } from "store";
 import { Ordering, TripSorting } from "generated/openapi";
@@ -35,23 +35,6 @@ import { GridContainer, HeaderButtonCell, HeaderTrack } from "containers";
 import { ArrowBackIos } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import theme from "app/theme";
-import { connect } from "http2";
-import { DateRange } from "components/MainMenu/SearchFilters/DateFilter";
-import { DateFilter } from "components/MainMenu/SearchFilters/DateFilter";
-
-
-const DataPickerFunc = (props: any) => {
-  // Define your value and onChange functions here
-  const [value, setValue] = useState<DateRange>(/* initial value here */);
-
-  const onChange = (newDateRange: DateRange | undefined) => {
-    // Handle the new date range here
-    setValue(newDateRange);
-  };
-
-  return <DateFilter value={value} onChange={onChange} />;
-};
-
 
 const GridMainArea = (props: any) => (
   <Box
@@ -104,6 +87,7 @@ export const BenchmarkView: FC = () => {
 
   let BenchmarkPeriod = useAppSelector(selectBenchmarkPeriod);
 
+
   useEffect(() => {
     dispatch(setViewState(MenuViewState.Benchmark));
     if (vessel) {
@@ -139,19 +123,8 @@ export const BenchmarkView: FC = () => {
   if (!vessel) {
     return <></>;
   }
-
   if (!loggedIn && !isLoading && !userData) {
     signIn();
-  }
-  if (!vessel) {
-    navigate("/");
-    return <p>No vessel associated with this user</p>;
-  }
-
-  if (BenchmarkPeriod === undefined) {
-    BenchmarkPeriod = trips
-      ? new DateRange(new Date(trips[trips.length - 1].start), new Date(trips[0].end))
-      : new DateRange(new Date(), new Date());
   }
 
   return (
@@ -218,7 +191,6 @@ export const BenchmarkView: FC = () => {
               <HistoricalCatches />
             </Box>
           )}
-          <DatePeriodPicker period={BenchmarkPeriod} existingTrips={false}/>
           {!tripsLoading && !trips?.length && (
             <Box sx={{ display: "grid", placeItems: "center" }}>
               <Typography color="text.secondary" variant="h2">

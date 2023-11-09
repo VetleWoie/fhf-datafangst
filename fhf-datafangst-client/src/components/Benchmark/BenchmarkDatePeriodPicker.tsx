@@ -1,14 +1,10 @@
-
-import { Box, SxProps, Typography } from "@mui/material";
-import { FC, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Box, SxProps } from "@mui/material";
 import { DateRange } from "../MainMenu/SearchFilters/DateFilter"
 import { DateFilter } from "../MainMenu/SearchFilters/DateFilter";
 import { getTrips, selectBwUserProfile, selectTrips, selectVesselsByCallsign, useAppDispatch, useAppSelector, selectBenchmarkPeriod } from "store";
 import { Ordering, TripSorting } from "generated/openapi";
 import { selectBenchmarkNumHistoric } from "store/benchmark";
 import { setBenchmarkPeriod, getBenchmarkOwnTrips } from "store/benchmark";
-import { paginateTripsSearch } from "store";
 
 // TODO:
 // - Fiks perioder uten turer.
