@@ -143,6 +143,16 @@ export const BenchmarkView: FC = () => {
   if (!loggedIn && !isLoading && !userData) {
     signIn();
   }
+  if (!vessel) {
+    navigate("/");
+    return <p>No vessel associated with this user</p>;
+  }
+
+  if (BenchmarkPeriod === undefined) {
+    BenchmarkPeriod = trips
+      ? new DateRange(new Date(trips[trips.length - 1].start), new Date(trips[0].end))
+      : new DateRange(new Date(), new Date());
+  }
 
   return (
     <>
@@ -208,6 +218,7 @@ export const BenchmarkView: FC = () => {
               <HistoricalCatches />
             </Box>
           )}
+          <DatePeriodPicker period={BenchmarkPeriod} existingTrips={false}/>
           {!tripsLoading && !trips?.length && (
             <Box sx={{ display: "grid", placeItems: "center" }}>
               <Typography color="text.secondary" variant="h2">
