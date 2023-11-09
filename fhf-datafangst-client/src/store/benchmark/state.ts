@@ -1,11 +1,11 @@
 import { Trip } from "generated/openapi";
+import { DateRange } from "components/MainMenu/SearchFilters/DateFilter";
 
 export interface HistoricParams {
   vesselNames: string[];
   dataset: (string | number)[][];
   metric?: string;
 }
-import { DateRange } from "components/MainMenu/SearchFilters/DateFilter";
 
 export interface BenchmarkModalParams {
   title?: string;
@@ -25,6 +25,7 @@ export interface BenchmarkState {
   benchmarkNumHistoric: number;
   benchmarkDataSource: BenchmarkDataSource;
   benchmarkPeriod?: DateRange;
+  offsetVal: number;
 }
 
 export const initialBenchmarkState: BenchmarkState = {
@@ -34,4 +35,5 @@ export const initialBenchmarkState: BenchmarkState = {
   benchmarkPeriod: undefined,
   benchmarkNumHistoric: 10,
   benchmarkDataSource: BenchmarkDataSource.Landings,
+  offsetVal: 0,
 };

@@ -6,7 +6,7 @@ import {
   setBenchmarkDataSource,
   setBenchmarkHistoric,
   setBenchmarkModal,
-  setBenchmarkPeriod,
+  setBenchmarkPeriod
 } from "./actions";
 import { Trip } from "generated/openapi";
 

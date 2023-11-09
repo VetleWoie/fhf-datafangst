@@ -23,6 +23,7 @@ import {
   setViewState,
   useAppDispatch,
   useAppSelector,
+  selectBenchmarkPeriod,
   selectTripsLoading,
 } from "store";
 import { Ordering, TripSorting } from "generated/openapi";
@@ -31,22 +32,7 @@ import { ArrowBackIos } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import theme from "app/theme";
 import { DateRange } from "components/MainMenu/SearchFilters/DateFilter"
-import { selectBenchmarkPeriod } from "store/benchmark";
 import { DateFilter } from "components/MainMenu/SearchFilters/DateFilter"
-
-
-const DataPickerFunc = (props: any) => {
-  // Define your value and onChange functions here
-  const [value, setValue] = useState<DateRange>(/* initial value here */);
-
-  const onChange = (newDateRange: DateRange | undefined) => {
-    // Handle the new date range here
-    setValue(newDateRange);
-  };
-
-  return <DateFilter value={value} onChange={onChange} />;
-};
-
 
 const GridMainArea = (props: any) => (
   <Box
@@ -143,6 +129,10 @@ export const BenchmarkView: FC = () => {
       : new DateRange(new Date(), new Date());
   }
 
+  if (!loggedIn && !isLoading && !userData) {
+    signIn();
+  }
+
   return (
     <>
       <GridContainer>
@@ -203,6 +193,7 @@ export const BenchmarkView: FC = () => {
               <SpeciesHistogram />
             </Box>
           )}
+          <DatePeriodPicker period={BenchmarkPeriod} existingTrips={false}/>
           {!tripsLoading && !trips?.length && (
             <Box sx={{ display: "grid", placeItems: "center" }}>
               <Typography color="text.secondary" variant="h2">
@@ -214,7 +205,6 @@ export const BenchmarkView: FC = () => {
               </Typography>
             </Box>
           )}
-        <DatePeriodPicker period={BenchmarkPeriod} existingTrips={false}></DatePeriodPicker>
         </GridMainArea>
       </GridContainer>
     </>
