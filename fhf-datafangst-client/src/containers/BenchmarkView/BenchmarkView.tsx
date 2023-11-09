@@ -12,6 +12,7 @@ import { useAuth } from "oidc-react";
 import {
   MenuViewState,
   getBenchmarkData,
+  getBenchmarkOwnTrips,
   getTrips,
   selectBenchmarkNumHistoric,
   selectBwUserProfile,
@@ -32,7 +33,7 @@ import { ArrowBackIos } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import theme from "app/theme";
 import { DateRange } from "components/MainMenu/SearchFilters/DateFilter"
-import { DateFilter } from "components/MainMenu/SearchFilters/DateFilter"
+import { connect } from "http2";
 
 const GridMainArea = (props: any) => (
   <Box
@@ -84,6 +85,7 @@ export const BenchmarkView: FC = () => {
 
   let BenchmarkPeriod = useAppSelector(selectBenchmarkPeriod);
 
+
   useEffect(() => {
     dispatch(setViewState(MenuViewState.Benchmark));
     if (vessel) {
@@ -95,6 +97,14 @@ export const BenchmarkView: FC = () => {
           offset: 0,
         }),
       );
+      dispatch(
+        getBenchmarkOwnTrips({
+          vessels: [vessel],
+          sorting: [TripSorting.StopDate, Ordering.Desc],
+          limit: benchmarkHistoric,
+          offset: 0,
+        })
+      )
     }
     if (followVessels) {
       followVessels.forEach((vessel) => {
@@ -123,11 +133,15 @@ export const BenchmarkView: FC = () => {
     return <p>No vessel associated with this user</p>;
   }
 
+
+  /*
   if (BenchmarkPeriod === undefined) {
-    BenchmarkPeriod = trips
-      ? new DateRange(new Date(trips[trips.length - 1].start), new Date(trips[0].end))
-      : new DateRange(new Date(), new Date());
+     BenchmarkPeriod = trips
+     ? new DateRange(new Date(trips[trips.length - 1].start), new Date(trips[0].end))
+     : new DateRange(new Date(), new Date());
+    console.log("trips: ", trips)
   }
+  */
 
   if (!loggedIn && !isLoading && !userData) {
     signIn();
@@ -193,7 +207,7 @@ export const BenchmarkView: FC = () => {
               <SpeciesHistogram />
             </Box>
           )}
-          <DatePeriodPicker period={BenchmarkPeriod} existingTrips={false}/>
+            <DatePeriodPicker existingTrips={false}/>
           {!tripsLoading && !trips?.length && (
             <Box sx={{ display: "grid", placeItems: "center" }}>
               <Typography color="text.secondary" variant="h2">

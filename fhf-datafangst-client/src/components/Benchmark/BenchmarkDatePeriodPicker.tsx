@@ -1,12 +1,12 @@
 
-import { Box, Typography } from "@mui/material";
+import { Box, SxProps, Typography } from "@mui/material";
 import { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DateRange } from "../MainMenu/SearchFilters/DateFilter"
 import { DateFilter } from "../MainMenu/SearchFilters/DateFilter";
-import { getTrips, selectBwUserProfile, selectTrips, selectVesselsByCallsign, useAppDispatch, useAppSelector } from "store";
+import { getTrips, selectBwUserProfile, selectTrips, selectVesselsByCallsign, useAppDispatch, useAppSelector, selectBenchmarkPeriod } from "store";
 import { Ordering, TripSorting } from "generated/openapi";
-import { setBenchmarkPeriod } from "store/benchmark";
+import { setBenchmarkPeriod, getBenchmarkOwnTrips } from "store/benchmark";
 
 // TODO:
 // - Fiks perioder uten turer.
@@ -14,8 +14,9 @@ import { setBenchmarkPeriod } from "store/benchmark";
 // Fiks at man kan skrive inn i datofeltet uten at den referesher før man er ferdig.
 
 interface datePickerProps {
-  period: DateRange;
+  period?: DateRange;
   existingTrips: boolean;
+  sx?: SxProps;
 }
 
 export const DatePeriodPicker = (props: datePickerProps) => {
@@ -24,15 +25,11 @@ export const DatePeriodPicker = (props: datePickerProps) => {
   const vesselInfo = profile?.vesselInfo;
   const vessels = useAppSelector(selectVesselsByCallsign);
   const vessel = vesselInfo?.ircs ? vessels[vesselInfo.ircs] : undefined;
-  const trips = useAppSelector(selectTrips)
-
+  const datePeriod = useAppSelector(selectBenchmarkPeriod)
+  console.log("props.period: ", props.period)
   if (!vessel) {
     return <></>
   };
-
-  const [value, setValue] = useState<DateRange>(
-    props.period
-    );
 
 
   const onChange = (newDateRange: DateRange | undefined) => {
@@ -41,19 +38,19 @@ export const DatePeriodPicker = (props: datePickerProps) => {
     }
 
     dispatch(
-      getTrips({
+      getBenchmarkOwnTrips({
         vessels: [vessel],
         sorting: [TripSorting.StopDate, Ordering.Desc],
         dateRange: newDateRange
       }))
-    setValue(newDateRange);
+    console.log("onChange newDateRange: ", newDateRange)
     dispatch(setBenchmarkPeriod(newDateRange));
   };
 
   return (
     <Box>
       <CalenderContainer existingTrips = {props.existingTrips}>
-        <DateFilter value={value} onChange={onChange} />
+        <DateFilter value={datePeriod} onChange={onChange} />
       </CalenderContainer>
     </Box>
   )

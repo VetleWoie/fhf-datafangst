@@ -14,6 +14,10 @@ export const getBenchmarkData = createAsyncThunk(
   "benchmark/getBenchmarkData",
   Api.getTrips,
 );
+export const getBenchmarkOwnTrips = createAsyncThunk(
+  "benchmark/getBenchmarkOwnTrips",
+  Api.getTrips,
+);
 export const setBenchmarkModal = createAction<BenchmarkModalParams | undefined>(
   "benchmark/setBenchmarkModal",
 );

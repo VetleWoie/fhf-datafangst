@@ -3,11 +3,13 @@ import { AppState } from "store/state";
 import {
   clearBenchmarkData,
   getBenchmarkData,
+  getBenchmarkOwnTrips,
   setBenchmarkDataSource,
   setBenchmarkHistoric,
   setBenchmarkModal,
   setBenchmarkPeriod
 } from "./actions";
+import { DateRange } from "components/MainMenu/SearchFilters/DateFilter"
 import { Trip } from "generated/openapi";
 
 export const benchmarkBuilder = (
@@ -27,6 +29,10 @@ export const benchmarkBuilder = (
       state.benchmarkTrips[action.payload[0].fiskeridirVesselId] =
         action.payload;
     })
+    .addCase(getBenchmarkOwnTrips.fulfilled, (state, action) => {
+      state.trips = action.payload;
+      state.benchmarkPeriod = new DateRange(new Date(state.trips[length-1].start), new Date(state.trips[0].end))
+    })
     .addCase(clearBenchmarkData, (state, action) => {
       const tmp: Record<number, Trip[]> = {};
       Object.keys(state.benchmarkTrips)
@@ -40,5 +46,4 @@ export const benchmarkBuilder = (
     })
     .addCase(setBenchmarkPeriod, (state, action) => {
       state.benchmarkPeriod = action.payload
-      console.log("action" , action.payload)
     });
