@@ -123,6 +123,7 @@ export const BenchmarkView: FC = () => {
   if (!vessel) {
     return <></>;
   }
+
   if (!loggedIn && !isLoading && !userData) {
     signIn();
   }

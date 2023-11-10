@@ -35,7 +35,6 @@ export const benchmarkBuilder = (
         state.trips = [];
       }
       state.trips = state.trips?.concat(action.payload);
-      console.log("trips: ", state.trips, "action: ", action, "current: ", current(state))
       if (action.payload.length === (action.meta.arg.limit ?? state.benchmarkNumHistoric)) {
         (action as any).asyncDispatch(getBenchmarkOwnTrips({
            ...action.meta.arg,

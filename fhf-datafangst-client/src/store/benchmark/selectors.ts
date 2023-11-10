@@ -29,3 +29,7 @@ export const selectBenchmarkPeriod = createSelector(
   selectAppState,
   (state) => state.benchmarkPeriod,
 );
+export const selectBenchmarkoffsetVal = createSelector(
+  selectAppState,
+  (state) => state.benchmarkoffsetVal
+);
