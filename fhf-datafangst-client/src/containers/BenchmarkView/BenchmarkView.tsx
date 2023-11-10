@@ -94,14 +94,7 @@ export const BenchmarkView: FC = () => {
           offset: 0,
         }),
       );
-      dispatch(
-        getBenchmarkOwnTrips({
-          vessels: [vessel],
-          sorting: [TripSorting.StopDate, Ordering.Desc],
-          limit: benchmarkHistoric,
-          offset: 0,
-        })
-      )
+
     }
     if (followVessels) {
       followVessels.forEach((vessel) => {
@@ -129,16 +122,6 @@ export const BenchmarkView: FC = () => {
     navigate("/");
     return <p>No vessel associated with this user</p>;
   }
-
-
-  /*
-  if (BenchmarkPeriod === undefined) {
-     BenchmarkPeriod = trips
-     ? new DateRange(new Date(trips[trips.length - 1].start), new Date(trips[0].end))
-     : new DateRange(new Date(), new Date());
-    console.log("trips: ", trips)
-  }
-  */
 
   if (!loggedIn && !isLoading && !userData) {
     signIn();

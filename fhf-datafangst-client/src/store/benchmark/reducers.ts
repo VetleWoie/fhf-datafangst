@@ -30,8 +30,20 @@ export const benchmarkBuilder = (
         action.payload;
     })
     .addCase(getBenchmarkOwnTrips.fulfilled, (state, action) => {
-      state.trips = action.payload;
-      state.benchmarkPeriod = new DateRange(new Date(action.payload[action.payload.length - 1].start), new Date(action.payload[0].end))
+      state.benchmarkPeriod = new DateRange(new Date(action.payload[action.payload.length - 1].start), new Date(action.payload[0].end));
+      if (action.meta.arg.offset === 0) {
+        state.trips = [];
+      }
+      // Something wrong with how i send in the offset to getBenchmarkOwntrips in BenchmarkDatePeriodPicker
+      if (action.payload.length === (action.meta.arg.limit ?? state.benchmarkNumHistoric)) {
+        (action as any).asyncDispatch(getBenchmarkOwnTrips({
+          ...action.meta.arg,
+          offset: action.meta.arg.offset ? action.meta.arg.offset + 1 : 1,
+        })
+        );
+        console.log("offset: ", action.meta.arg.offset, "length: ", action.payload.length, "trips: ", state.trips)
+        state.trips?.push(...action.payload)
+      };
     })
     .addCase(clearBenchmarkData, (state, action) => {
       const tmp: Record<number, Trip[]> = {};

@@ -25,7 +25,8 @@ export interface BenchmarkState {
   benchmarkNumHistoric: number;
   benchmarkDataSource: BenchmarkDataSource;
   benchmarkPeriod?: DateRange;
-  offsetVal: number;
+  benchmarkoffsetVal: number;
+
 }
 
 export const initialBenchmarkState: BenchmarkState = {
@@ -35,5 +36,5 @@ export const initialBenchmarkState: BenchmarkState = {
   benchmarkPeriod: undefined,
   benchmarkNumHistoric: 10,
   benchmarkDataSource: BenchmarkDataSource.Landings,
-  offsetVal: 0,
+  benchmarkoffsetVal: 0,
 };
