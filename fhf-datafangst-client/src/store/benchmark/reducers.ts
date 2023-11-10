@@ -31,7 +31,10 @@ export const benchmarkBuilder = (
     })
     .addCase(getBenchmarkOwnTrips.fulfilled, (state, action) => {
       state.trips = action.payload;
-      state.benchmarkPeriod = new DateRange(new Date(state.trips[length-1].start), new Date(state.trips[0].end))
+      console.log("payload: ", action.payload)
+      if (action.payload.length !== 0) {
+        state.benchmarkPeriod = new DateRange(new Date(action.payload[action.payload.length - 1].start), new Date(action.payload[0].end))
+      }
     })
     .addCase(clearBenchmarkData, (state, action) => {
       const tmp: Record<number, Trip[]> = {};

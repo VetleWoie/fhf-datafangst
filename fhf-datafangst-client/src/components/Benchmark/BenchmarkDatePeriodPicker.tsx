@@ -6,6 +6,7 @@ import { DateRange } from "../MainMenu/SearchFilters/DateFilter"
 import { DateFilter } from "../MainMenu/SearchFilters/DateFilter";
 import { getTrips, selectBwUserProfile, selectTrips, selectVesselsByCallsign, useAppDispatch, useAppSelector, selectBenchmarkPeriod } from "store";
 import { Ordering, TripSorting } from "generated/openapi";
+import { selectBenchmarkNumHistoric } from "store/benchmark";
 import { setBenchmarkPeriod, getBenchmarkOwnTrips } from "store/benchmark";
 
 // TODO:
@@ -21,30 +22,32 @@ interface datePickerProps {
 
 export const DatePeriodPicker = (props: datePickerProps) => {
   const dispatch = useAppDispatch()
+  const benchmarkHistoric = useAppSelector(selectBenchmarkNumHistoric);
   const profile = useAppSelector(selectBwUserProfile);
   const vesselInfo = profile?.vesselInfo;
   const vessels = useAppSelector(selectVesselsByCallsign);
   const vessel = vesselInfo?.ircs ? vessels[vesselInfo.ircs] : undefined;
-  const datePeriod = useAppSelector(selectBenchmarkPeriod)
-  console.log("props.period: ", props.period)
+  let datePeriod = useAppSelector(selectBenchmarkPeriod)
   if (!vessel) {
     return <></>
   };
 
 
-  const onChange = (newDateRange: DateRange | undefined) => {
-    if (!newDateRange) {
+  const onChange = (datePeriod: DateRange | undefined) => {
+    if (!datePeriod) {
       return
     }
+    dispatch(setBenchmarkPeriod(datePeriod));
 
     dispatch(
       getBenchmarkOwnTrips({
         vessels: [vessel],
         sorting: [TripSorting.StopDate, Ordering.Desc],
-        dateRange: newDateRange
+        limit: benchmarkHistoric,
+        dateRange: datePeriod,
+        offset: 0,
       }))
-    console.log("onChange newDateRange: ", newDateRange)
-    dispatch(setBenchmarkPeriod(newDateRange));
+      console.log("onChange newDateRange: ", datePeriod.start, datePeriod.end)
   };
 
   return (
@@ -66,7 +69,7 @@ const CalenderContainer = (props: CalenderContainerProps) => (
     sx={{
       backgroundColor: "primary.main",
       color: "white",
-      width: props.existingTrips ? "20%" : "100%"
+      width: props.existingTrips ? "20%" : "30%"
     }}>
     {props.children}
   </Box>
