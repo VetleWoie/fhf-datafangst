@@ -6,6 +6,7 @@ import {
   LocalLoadingProgress,
   FollowList,
   DatePeriodPicker
+  HistoricalCatches,
 } from "components";
 import { FC, useEffect, useState } from "react";
 import { useAuth } from "oidc-react";
@@ -15,6 +16,7 @@ import {
   getBenchmarkOwnTrips,
   getTrips,
   selectBenchmarkNumHistoric,
+  selectBenchmarkTimeSpan,
   selectBwUserProfile,
   selectIsLoggedIn,
   selectTrips,
@@ -26,6 +28,7 @@ import {
   useAppSelector,
   selectBenchmarkPeriod,
   selectTripsLoading,
+  getLandings,
 } from "store";
 import { Ordering, TripSorting } from "generated/openapi";
 import { GridContainer, HeaderButtonCell, HeaderTrack } from "containers";
@@ -79,6 +82,7 @@ export const BenchmarkView: FC = () => {
   const tripsLoading = useAppSelector(selectTripsLoading);
   const user = useAppSelector(selectUser);
   const benchmarkHistoric = useAppSelector(selectBenchmarkNumHistoric);
+  const benchmarkTimespan = useAppSelector(selectBenchmarkTimeSpan);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const followVessels = user?.following.map((id) => fiskeridirVessels[id]);
@@ -94,7 +98,12 @@ export const BenchmarkView: FC = () => {
           offset: 0,
         }),
       );
-
+      dispatch(
+        getLandings({
+          vessels: [vessel],
+          years: [benchmarkTimespan.startYear, benchmarkTimespan.endYear],
+        }),
+      );
     }
     if (followVessels) {
       followVessels.forEach((vessel) => {
@@ -185,6 +194,7 @@ export const BenchmarkView: FC = () => {
             <Box>
               <BenchmarkCards />
               <SpeciesHistogram />
+              <HistoricalCatches />
             </Box>
           )}
             <DatePeriodPicker existingTrips={false}/>
