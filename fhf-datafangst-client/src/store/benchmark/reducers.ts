@@ -34,6 +34,7 @@ export const benchmarkBuilder = (
       if (action.meta.arg.offset === 0) {
         state.trips = [];
       }
+      state.trips = state.trips?.concat(action.payload);
       if (action.payload.length === (action.meta.arg.limit ?? state.benchmarkNumHistoric)) {
         (action as any).asyncDispatch(getBenchmarkOwnTrips({
            ...action.meta.arg,

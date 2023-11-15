@@ -85,9 +85,6 @@ export const BenchmarkView: FC = () => {
   const navigate = useNavigate();
   const followVessels = user?.following.map((id) => fiskeridirVessels[id]);
 
-  let BenchmarkPeriod = useAppSelector(selectBenchmarkPeriod);
-
-
   useEffect(() => {
     dispatch(setViewState(MenuViewState.Benchmark));
     if (vessel) {
