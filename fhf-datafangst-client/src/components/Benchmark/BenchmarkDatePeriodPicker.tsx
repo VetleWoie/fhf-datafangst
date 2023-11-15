@@ -6,7 +6,7 @@ import { DateRange } from "../MainMenu/SearchFilters/DateFilter"
 import { DateFilter } from "../MainMenu/SearchFilters/DateFilter";
 import { getTrips, selectBwUserProfile, selectTrips, selectVesselsByCallsign, useAppDispatch, useAppSelector, selectBenchmarkPeriod } from "store";
 import { Ordering, TripSorting } from "generated/openapi";
-import { selectBenchmarkNumHistoric, selectBenchmarkoffsetVal } from "store/benchmark";
+import { selectBenchmarkNumHistoric } from "store/benchmark";
 import { setBenchmarkPeriod, getBenchmarkOwnTrips } from "store/benchmark";
 import { paginateTripsSearch } from "store";
 
@@ -24,7 +24,6 @@ interface datePickerProps {
 export const DatePeriodPicker = (props: datePickerProps) => {
   const dispatch = useAppDispatch()
   const benchmarkHistoric = useAppSelector(selectBenchmarkNumHistoric);
-  const benchhmarkoffsetVal = useAppSelector(selectBenchmarkoffsetVal)
   const profile = useAppSelector(selectBwUserProfile);
   const existingTrips = useAppSelector(selectTrips);
   const vesselInfo = profile?.vesselInfo;
@@ -51,7 +50,7 @@ export const DatePeriodPicker = (props: datePickerProps) => {
         sorting: [TripSorting.StopDate, Ordering.Desc],
         dateRange: datePeriod,
         limit: benchmarkHistoric,
-        offset: benchhmarkoffsetVal ?? 0,
+        offset: 0,
       }))
   };
 

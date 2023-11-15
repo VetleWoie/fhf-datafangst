@@ -11,6 +11,7 @@ import {
 } from "./actions";
 import { DateRange } from "components/MainMenu/SearchFilters/DateFilter"
 import { Trip } from "generated/openapi";
+import { createReducer, createAction, current } from '@reduxjs/toolkit'
 
 export const benchmarkBuilder = (
   builder: ActionReducerMapBuilder<AppState>,
@@ -30,20 +31,18 @@ export const benchmarkBuilder = (
         action.payload;
     })
     .addCase(getBenchmarkOwnTrips.fulfilled, (state, action) => {
-      state.benchmarkPeriod = new DateRange(new Date(action.payload[action.payload.length - 1].start), new Date(action.payload[0].end));
       if (action.meta.arg.offset === 0) {
         state.trips = [];
       }
-      // Something wrong with how i send in the offset to getBenchmarkOwntrips in BenchmarkDatePeriodPicker
+      state.trips = state.trips?.concat(action.payload);
+      console.log("trips: ", state.trips, "action: ", action, "current: ", current(state))
       if (action.payload.length === (action.meta.arg.limit ?? state.benchmarkNumHistoric)) {
         (action as any).asyncDispatch(getBenchmarkOwnTrips({
-          ...action.meta.arg,
-          offset: action.meta.arg.offset ? action.meta.arg.offset + 1 : 1,
-        })
-        );
-        console.log("offset: ", action.meta.arg.offset, "length: ", action.payload.length, "trips: ", state.trips)
-        state.trips?.push(...action.payload)
-      };
+           ...action.meta.arg,
+          offset: action.meta.arg.offset! + state.benchmarkNumHistoric,
+         }),
+         );
+       };
     })
     .addCase(clearBenchmarkData, (state, action) => {
       const tmp: Record<number, Trip[]> = {};
