@@ -181,10 +181,10 @@ export const BenchmarkView: FC = () => {
           {tripsLoading && <LocalLoadingProgress />}
           {trips?.length && (
             <Box>
+              <BenchmarkCards />
               <Box sx={{display: "grid", placeItems: "center" }}>
                   <DatePeriodPicker existingTrips={false}/>
               </Box>
-              <BenchmarkCards />
               <SpeciesHistogram />
               <HistoricalCatches />
             </Box>
